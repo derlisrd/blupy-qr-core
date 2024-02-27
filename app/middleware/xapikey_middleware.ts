@@ -17,6 +17,10 @@ export default class XapikeyMiddleware {
       return response.status(401).json({ success:false,message:'Keys invalidas' })
     }
 
+    if(foundApi.activo == 0){
+      return response.status(401).json({ success:false,message:'Keys desactivada' })
+    }
+
     if (!apiKey || apiKey !== foundApi.key) {
       return response.status(401).json({ success:false,message:'API KEY invalido' })
     }

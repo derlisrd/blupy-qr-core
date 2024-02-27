@@ -9,6 +9,9 @@ export default class Key extends BaseModel {
   declare user_id:number
   
   @column()
+  declare activo:number
+  
+  @column()
   declare key:string
 
   @column.dateTime({ autoCreate: true })

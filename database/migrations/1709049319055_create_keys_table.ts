@@ -13,6 +13,7 @@ export default class extends BaseSchema {
         .onDelete('CASCADE')
         .onUpdate('CASCADE')
       table.text('key')
+      table.boolean('activo').defaultTo(0)
       table.timestamp('created_at')
       table.timestamp('updated_at')
     })

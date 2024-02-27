@@ -15,7 +15,7 @@ import router from '@adonisjs/core/services/router'
 router.group(()=>{
     router.post('/generar-qr',[GeneradosController,'generarQR']);
     router.get('/consultar-autorizacion/:id',[GeneradosController,'consultarAutorizacion'])
-    router.post('/autorizar-qr/:id',[GeneradosController,'autorizarQR'])
+    router.post('/autorizar-qr',[GeneradosController,'autorizarQR'])
 })
 
 

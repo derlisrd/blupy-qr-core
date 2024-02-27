@@ -52,7 +52,7 @@ export default class GeneradosController {
 
     async autorizarQR({request,response} : HttpContext){
         try{
-            const id =  request.param('id')
+            const id =  request.input('id')
             const generado = await Generado.findBy('id',id);
             if(!generado){
                 return response.status(404).json({success:false,message:'QR inexistente.'})
