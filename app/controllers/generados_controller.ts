@@ -13,7 +13,7 @@ export default class GeneradosController {
                 success:true,
                 results: generado
             })
-        } catch (error) {
+        } catch (error) {      
             return response.status(500).json({success:false,error:'Error de servidor contactar con administrador'})
         }
     }
@@ -25,7 +25,7 @@ export default class GeneradosController {
     async consultarAutorizacion({request,response} : HttpContext){
         try{
            const id =  request.param('id')
-           const generado = await Generado.query().where('id',id).where('status',1).first()
+           const generado = await Generado.findBy('id',id);
            if(!generado){
             return response.json({success:false,message:'No autorizado'})
            }
@@ -37,7 +37,11 @@ export default class GeneradosController {
                 return response.status(403).json({ success: false, message: 'QR vencido. Debe generar otro' });
             }
 
-           return response.json({success:true, results: generado})
+            if(generado.status == 0){
+                return response.status(403).json({ success: false, message: 'QR aun no autorizado' });
+            }
+
+           return response.json({success:true, message:'QR autorizado'})
         } catch (error) {
             return response.status(500).json({success:false,error:'Error de servidor contactar con administrador'})
         }

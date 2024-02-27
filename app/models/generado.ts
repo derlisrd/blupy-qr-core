@@ -1,14 +1,20 @@
 import { DateTime } from 'luxon'
-import { BaseModel, column } from '@adonisjs/lucid/orm'
+import { BaseModel, beforeCreate, column } from '@adonisjs/lucid/orm'
+import { randomUUID } from 'crypto'
 
 export default class Generado extends BaseModel {
 
   static get table(){
     return 'generados'
   }
+  
+  @beforeCreate()
+  public static async setID(generado : Generado){
+    generado.id = randomUUID()
+  }
 
   @column({ isPrimary: true })
-  declare id: number
+  declare id: number | string
 
   @column()
   declare monto:number
