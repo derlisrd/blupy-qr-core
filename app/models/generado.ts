@@ -7,14 +7,14 @@ export default class Generado extends BaseModel {
   static get table(){
     return 'generados'
   }
-  
+
   @beforeCreate()
   public static async setID(generado : Generado){
     generado.id = randomUUID()
   }
 
   @column({ isPrimary: true })
-  declare id: number | string
+  declare id:  string
 
   @column()
   declare monto:number
