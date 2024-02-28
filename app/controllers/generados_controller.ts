@@ -83,6 +83,39 @@ export default class GeneradosController {
 
 
 
+    async consultarQR({request,response} : HttpContext){
+        try {
+            const id =  request.param('id')
+            const generado = await Generado.find(id);
+           if(!generado){
+            return response.status(404).json({success:false,message:'No existe qr'})
+           }
+            const tresMinutos = 5 * 60 * 1000; // 5 minutos en milisegundos
+            const tiempoActual = new Date().getTime();
+            const tiempoCreacion = new Date(`${generado.createdAt}`).getTime();
+            if (tiempoActual - tiempoCreacion > tresMinutos) {
+                return response.status(403).json({ success: false, message: 'QR vencido.' });
+            }
+           await generado.load('comercio')
+           
+           const results = {
+            id: generado.id,
+            comercio: generado.comercio.nombre,
+            sucursal: generado.comercio.sucursal,
+            descripcion: generado.descripcion,
+            status: generado.status,
+            monto: generado.monto,
+            moneda:generado.moneda
+           }
+           
+           return {success:true,results}
+        } catch (error) {
+            console.log(error);
+            
+            return response.status(500).json({success:false,error:'Error de servidor contactar con administrador'})
+        }
+    }
+
 
 
 }
