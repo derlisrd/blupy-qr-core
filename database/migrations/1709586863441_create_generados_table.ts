@@ -12,10 +12,19 @@ export default class extends BaseSchema {
         .inTable('comercios')
         .onDelete('CASCADE')
         .onUpdate('CASCADE')
+        
+      table.integer('moneda_id').defaultTo(1)
+        .unsigned()
+        .references('id')
+        .inTable('monedas')
+        .onDelete('CASCADE')
+        .onUpdate('CASCADE')
+
       table.text('descripcion').nullable()
       table.double('monto',20,2)
       table.integer('cuotas').defaultTo(0)
-      table.integer('moneda').defaultTo(1)
+      
+
       table.text('numero').nullable()
       table.tinyint('status').defaultTo(0)
 

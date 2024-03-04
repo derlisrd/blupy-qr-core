@@ -3,6 +3,7 @@ import { BaseModel, beforeCreate, belongsTo, column } from '@adonisjs/lucid/orm'
 import { randomUUID } from 'crypto'
 import Comercio from './comercio.js'
 import type { BelongsTo } from '@adonisjs/lucid/types/relations'
+import Moneda from './moneda.js'
 
 
 export default class Generado extends BaseModel {
@@ -32,7 +33,12 @@ export default class Generado extends BaseModel {
   declare cuotas:number
 
   @column()
-  declare moneda:number
+  declare moneda_id:number
+
+  @belongsTo(() => Moneda,{
+    foreignKey:'moneda_id'
+  })
+  declare moneda: BelongsTo<typeof Moneda>
   
   @column()
   declare numero:string

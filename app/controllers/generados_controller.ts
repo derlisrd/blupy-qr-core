@@ -7,13 +7,24 @@ export default class GeneradosController {
         try {
             const req = request.only(['monto','descripcion','comercio_id'])
 
-           const generado =  await Generado.create({monto: req.monto, descripcion: req.descripcion, comercio_id: req.comercio_id});
+           const generado =  await Generado.create({monto: req.monto, descripcion: req.descripcion, comercio_id: req.comercio_id, moneda_id:1})
+           
+           await generado.load('moneda')
+           await generado.load('comercio')
 
             return response.json({
                 success:true,
-                results: generado
+                results: {
+                    monto: generado.monto,
+                    descripcion: generado.descripcion,
+                    id: generado.id,
+                    moneda: generado.moneda.abreviatura,
+                    comercio: generado.comercio.nombre
+                }
             })
-        } catch (error) {      
+        } catch (error) {    
+            console.log(error);
+              
             return response.status(500).json({success:false,error:'Error de servidor contactar con administrador'})
         }
     }
@@ -25,7 +36,7 @@ export default class GeneradosController {
     async consultarAutorizacion({request,response} : HttpContext){
         try{
            const id =  request.param('id')
-           const generado = await Generado.findBy('id',id);
+           const generado = await Generado.find(id);
            if(!generado){
             return response.json({success:false,message:'No autorizado'})
            }
@@ -53,7 +64,7 @@ export default class GeneradosController {
     async autorizarQR({request,response} : HttpContext){
         try{
             const id =  request.input('id')
-            const generado = await Generado.findBy('id',id);
+            const generado = await Generado.find(id);
             if(!generado){
                 return response.status(404).json({success:false,message:'QR inexistente.'})
             }
@@ -97,6 +108,8 @@ export default class GeneradosController {
                 return response.status(403).json({ success: false, message: 'QR vencido.' });
             }
            await generado.load('comercio')
+
+           await generado.load('moneda')
            
            const results = {
             id: generado.id,
@@ -105,7 +118,7 @@ export default class GeneradosController {
             descripcion: generado.descripcion,
             status: generado.status,
             monto: generado.monto,
-            moneda:generado.moneda
+            moneda: generado.moneda.abreviatura
            }
            
            return {success:true,results}
