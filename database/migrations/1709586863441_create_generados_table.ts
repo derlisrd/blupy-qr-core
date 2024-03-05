@@ -20,6 +20,7 @@ export default class extends BaseSchema {
         .onDelete('CASCADE')
         .onUpdate('CASCADE')
 
+      table.string('numero_cuenta').nullable()
       table.text('descripcion').nullable()
       table.double('monto',20,2)
       table.integer('cuotas').defaultTo(0)

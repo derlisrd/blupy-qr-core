@@ -5,9 +5,15 @@ export default class GeneradosController {
 
     async generarQR({request,response} : HttpContext){
         try {
-            const req = request.only(['monto','descripcion','comercio_id'])
+            const req = request.only(['monto','descripcion','comercio_id','moneda_id'])
+            const idMoneda = req.moneda_id ?? 1;
 
-           const generado =  await Generado.create({monto: req.monto, descripcion: req.descripcion, comercio_id: req.comercio_id, moneda_id:1})
+           const generado =  await Generado.create({
+                monto: req.monto, 
+                descripcion: req.descripcion, 
+                comercio_id: req.comercio_id, 
+                moneda_id:idMoneda
+            })
            
            await generado.load('moneda')
            await generado.load('comercio')
@@ -40,11 +46,11 @@ export default class GeneradosController {
            if(!generado){
             return response.json({success:false,message:'No autorizado'})
            }
-            const tresMinutos = 5 * 60 * 1000; // 5 minutos en milisegundos
+            const cincoMinutos = 5 * 60 * 1000; // 5 minutos en milisegundos
             const tiempoActual = new Date().getTime();
             const tiempoCreacion = new Date(`${generado.createdAt}`).getTime();
 
-            if (tiempoActual - tiempoCreacion > tresMinutos) {
+            if (tiempoActual - tiempoCreacion > cincoMinutos) {
                 return response.status(403).json({ success: false, message: 'QR vencido. Debe generar otro' });
             }
 
@@ -63,17 +69,17 @@ export default class GeneradosController {
 
     async autorizarQR({request,response} : HttpContext){
         try{
-            const id =  request.input('id')
-            const generado = await Generado.find(id);
+            const req =  request.only(['id','numero_cuenta'])
+            const generado = await Generado.find(req.id);
             if(!generado){
                 return response.status(404).json({success:false,message:'QR inexistente.'})
             }
 
-            const tresMinutos = 5 * 60 * 1000; // 5 minutos en milisegundos
+            const cincoMinutos = 5 * 60 * 1000; // 5 minutos en milisegundos
             const tiempoActual = new Date().getTime();
             const tiempoCreacion = new Date(`${generado.createdAt}`).getTime();
 
-            if (tiempoActual - tiempoCreacion > tresMinutos) {
+            if (tiempoActual - tiempoCreacion > cincoMinutos) {
                 return response.status(403).json({ success: false, message: 'QR vencido.' });
             }
 
@@ -82,6 +88,7 @@ export default class GeneradosController {
             }
             
             generado.status = 1;
+            generado.numero_cuenta = req.numero_cuenta;
             await generado.save();
 
             return response.json({success:true,message: 'Autorizado'})
@@ -101,10 +108,10 @@ export default class GeneradosController {
            if(!generado){
             return response.status(404).json({success:false,message:'No existe qr'})
            }
-            const tresMinutos = 5 * 60 * 1000; // 5 minutos en milisegundos
+            const cincoMinutos = 5 * 60 * 1000; // 5 minutos en milisegundos
             const tiempoActual = new Date().getTime();
             const tiempoCreacion = new Date(`${generado.createdAt}`).getTime();
-            if (tiempoActual - tiempoCreacion > tresMinutos) {
+            if (tiempoActual - tiempoCreacion > cincoMinutos) {
                 return response.status(403).json({ success: false, message: 'QR vencido.' });
             }
            await generado.load('comercio')
