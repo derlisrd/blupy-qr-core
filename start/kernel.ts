@@ -33,8 +33,8 @@ server.use([
  * requests with a registered route.
  */
 router.use([
-  () => import('@adonisjs/core/bodyparser_middleware'), 
-  () => import('@adonisjs/auth/initialize_auth_middleware'), 
+  () => import('@adonisjs/core/bodyparser_middleware'),
+  () => import('@adonisjs/auth/initialize_auth_middleware'),
   () => import('#middleware/xapikey_middleware')
 ])
 
@@ -43,5 +43,6 @@ router.use([
  * the routes or the routes group.
  */
 export const middleware = router.named({
+  rol: () => import('#middleware/rol_middleware'),
   auth: () => import('#middleware/auth_middleware')
 })

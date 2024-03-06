@@ -1,75 +1,16 @@
-import Generado from '#models/generado'
+import Generado from '#models/generado';
+import { RegistrarTransaccion } from '#services/infinita_service';
+import { autorizarQRValidator } from '#validators/generar';
 import type { HttpContext } from '@adonisjs/core/http'
 
-export default class GeneradosController {
-
-    async generarQR({request,response} : HttpContext){
-        try {
-            const req = request.only(['monto','descripcion','comercio_id','moneda_id'])
-            const idMoneda = req.moneda_id ?? 1;
-
-           const generado =  await Generado.create({
-                monto: req.monto, 
-                descripcion: req.descripcion, 
-                comercio_id: req.comercio_id, 
-                moneda_id:idMoneda
-            })
-           
-           await generado.load('moneda')
-           await generado.load('comercio')
-
-            return response.json({
-                success:true,
-                results: {
-                    monto: generado.monto,
-                    descripcion: generado.descripcion,
-                    id: generado.id,
-                    moneda: generado.moneda.abreviatura,
-                    comercio: generado.comercio.nombre
-                }
-            })
-        } catch (error) {    
-            console.log(error);
-              
-            return response.status(500).json({success:false,error:'Error de servidor contactar con administrador'})
-        }
-    }
-
-
-
-
-
-    async consultarAutorizacion({request,response} : HttpContext){
-        try{
-           const id =  request.param('id')
-           const generado = await Generado.find(id);
-           if(!generado){
-            return response.json({success:false,message:'No autorizado'})
-           }
-            const cincoMinutos = 5 * 60 * 1000; // 5 minutos en milisegundos
-            const tiempoActual = new Date().getTime();
-            const tiempoCreacion = new Date(`${generado.createdAt}`).getTime();
-
-            if (tiempoActual - tiempoCreacion > cincoMinutos) {
-                return response.status(403).json({ success: false, message: 'QR vencido. Debe generar otro' });
-            }
-
-            if(generado.status == 0){
-                return response.status(403).json({ success: false, message: 'QR aun no autorizado' });
-            }
-
-           return response.json({success:true, message:'QR autorizado'})
-        } catch (error) {
-            return response.status(500).json({success:false,error:'Error de servidor contactar con administrador'})
-        }
-    }
-
-
-
+export default class GeneradosClientesController {
 
     async autorizarQR({request,response} : HttpContext){
         try{
-            const req =  request.only(['id','numero_cuenta'])
+            const req =  request.all()
+            
+            await autorizarQRValidator.validate(req)
+
             const generado = await Generado.find(req.id);
             if(!generado){
                 return response.status(404).json({success:false,message:'QR inexistente.'})
@@ -87,6 +28,9 @@ export default class GeneradosController {
                 return response.status(403).json({success:false,message:'QR ya autorizado'})
             }
             
+            const registrarEnInfinita = await RegistrarTransaccion(generado.monto,req.numero_cuenta,generado.descripcion)
+            generado.numero_movimiento = registrarEnInfinita.numero_movimiento
+
             generado.status = 1;
             generado.numero_cuenta = req.numero_cuenta;
             await generado.save();
@@ -94,12 +38,16 @@ export default class GeneradosController {
             return response.json({success:true,message: 'Autorizado'})
         }
         catch(error){
-            return response.status(500).json({success:false,error:'Error de servidor contactar con administrador'})
+            console.log(error)
+            const message = error.messages[0]['message'] ?? 'Error de servidor';
+            return response.status(error.status).json({success:false,message})
+           
         }
     }
 
 
 
+    
 
     async consultarQR({request,response} : HttpContext){
         try {
@@ -137,5 +85,6 @@ export default class GeneradosController {
     }
 
 
+    
 
 }

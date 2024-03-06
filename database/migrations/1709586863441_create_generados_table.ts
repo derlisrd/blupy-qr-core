@@ -26,7 +26,7 @@ export default class extends BaseSchema {
       table.integer('cuotas').defaultTo(0)
       
 
-      table.text('numero').nullable()
+      table.text('numero_movimiento').nullable()
       table.tinyint('status').defaultTo(0)
 
 

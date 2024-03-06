@@ -12,7 +12,7 @@ export default class extends BaseSchema {
       table.string('email', 254).notNullable().unique()
       table.string('password').notNullable()
       table.boolean('first').defaultTo(1)
-      table.tinyint('tipo').defaultTo(0)
+      table.tinyint('rol').defaultTo(0);
 
       table.timestamp('created_at').notNullable()
       table.timestamp('updated_at').nullable()

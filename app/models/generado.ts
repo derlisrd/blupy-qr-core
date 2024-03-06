@@ -44,7 +44,7 @@ export default class Generado extends BaseModel {
   declare moneda: BelongsTo<typeof Moneda>
   
   @column()
-  declare numero:string
+  declare numero_movimiento:string
 
   @column()
   declare comercio_id:number
