@@ -28,14 +28,15 @@ export default class GeneradosClientesController {
                 return response.status(403).json({success:false,message:'QR ya autorizado'})
             }
             
-            const registrarEnInfinita = await RegistrarTransaccion(generado.monto,req.numero_cuenta,generado.descripcion)
-            generado.numero_movimiento = registrarEnInfinita.numero_movimiento
+            // esto realizar si es externo
+            //const registrarEnInfinita = await RegistrarTransaccion(generado.monto,req.numero_cuenta,generado.descripcion)
+            //generado.numero_movimiento = registrarEnInfinita.numero_movimiento
 
             generado.status = 1;
             generado.numero_cuenta = req.numero_cuenta;
             await generado.save();
 
-            return response.json({success:true,message: 'Autorizado'})
+            return response.json({success:true,message: 'Autorizado', results:generado})
         }
         catch(error){
             console.log(error)

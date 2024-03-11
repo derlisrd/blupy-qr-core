@@ -64,7 +64,7 @@ export default class GeneradosComerciosController {
                 return response.status(403).json({ success: false, message: 'QR aun no autorizado' });
             }
 
-           return response.json({success:true, message:'QR autorizado'})
+           return response.json({success:true, message:'QR autorizado', results: generado})
         } catch (error) {
             return response.status(500).json({success:false,error:'Error de servidor contactar con administrador'})
         }
