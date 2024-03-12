@@ -1,5 +1,5 @@
 import Generado from '#models/generado';
-//import { RegistrarTransaccion } from '#services/infinita_service';
+
 import { autorizarQRValidator } from '#validators/generar';
 import type { HttpContext } from '@adonisjs/core/http'
 
@@ -29,8 +29,7 @@ export default class GeneradosClientesController {
             }
             
             // esto realizar si es externo
-            //const registrarEnInfinita = await RegistrarTransaccion(generado.monto,req.numero_cuenta,generado.descripcion)
-            //generado.numero_movimiento = registrarEnInfinita.numero_movimiento
+            // aca debe realizar transacion en infinita
 
             generado.status = 1;
             generado.numero_cuenta = req.numero_cuenta;

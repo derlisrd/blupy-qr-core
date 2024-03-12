@@ -1,8 +1,8 @@
-import env from '#start/env'
+//import env from '#start/env'
 
 
 export const RegistrarTransaccion = async(monto : number,numero_cuenta: number,descripcion: string)=>{
-    const datosParaApiInfinita = {
+    /* const datosParaApiInfinita = {
         "Transaccion":{
                   "MaeCtaId": numero_cuenta,
                   "MTNume":1,
@@ -12,7 +12,7 @@ export const RegistrarTransaccion = async(monto : number,numero_cuenta: number,d
                   "TcComId":  1,
                   "TcMovCuC": 1
               }
-      }
+      } */
 
       /**
        * 
@@ -34,9 +34,9 @@ export const RegistrarTransaccion = async(monto : number,numero_cuenta: number,d
     return { numero_movimiento: "12" }
 }
 export const RevertirTransaccion = async(numero_movimiento: string | number)=>{
-    const datosParaApiInfinita = {
+    /* const datosParaApiInfinita = {
         "TcMovNro": numero_movimiento
-      }  
+      }   */
 
       /**
        * 
