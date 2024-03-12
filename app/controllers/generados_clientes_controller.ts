@@ -1,5 +1,5 @@
 import Generado from '#models/generado';
-import { RegistrarTransaccion } from '#services/infinita_service';
+//import { RegistrarTransaccion } from '#services/infinita_service';
 import { autorizarQRValidator } from '#validators/generar';
 import type { HttpContext } from '@adonisjs/core/http'
 
@@ -36,7 +36,18 @@ export default class GeneradosClientesController {
             generado.numero_cuenta = req.numero_cuenta;
             await generado.save();
 
-            return response.json({success:true,message: 'Autorizado', results:generado})
+            await generado.load('moneda')
+            await generado.load('comercio')
+
+            const results = {
+                monto: generado.monto,
+                descripcion: generado.descripcion,
+                moneda: generado.moneda.abreviatura,
+                id: generado.id,
+                fecha: generado.createdAt,
+                comercio: generado.comercio.nombre
+            }
+            return response.json({success:true,message: 'Autorizado', results})
         }
         catch(error){
             console.log(error)

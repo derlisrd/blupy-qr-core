@@ -34,7 +34,9 @@ export default class GeneradosComerciosController {
                     descripcion: generado.descripcion,
                     id: generado.id,
                     moneda: generado.moneda.abreviatura,
-                    comercio: generado.comercio.nombre
+                    comercio: generado.comercio.nombre,
+                    sucursal: generado.comercio.sucursal,
+                    fecha: generado.createdAt
                 }
             })
         } catch (error) {
@@ -63,19 +65,46 @@ export default class GeneradosComerciosController {
             if(generado.status == 0){
                 return response.status(403).json({ success: false, message: 'QR aun no autorizado' });
             }
+            await generado.load('moneda')
 
-           return response.json({success:true, message:'QR autorizado', results: generado})
+            const results = {
+                id: generado.id,
+                numero_cuenta: generado.numero_cuenta,
+                monto: generado.monto,
+                moneda: generado.moneda.abreviatura,
+                cuotas: generado.cuotas,
+                descripcion: generado.descripcion,
+                fecha: generado.createdAt
+            }
+           return response.json({success:true, message:'Autorizado', results})
         } catch (error) {
             return response.status(500).json({success:false,error:'Error de servidor contactar con administrador'})
         }
     }
 
 
-    async revertir({request,response} : HttpContext){
+    async revertirPago({request,response} : HttpContext){
         try {
             const {id} =  request.only(['id'])
+            const generado = await Generado.find(id);
+            if(!generado){
+                return response.status(404).json({success:false,message:'No autorizado'})
+            }
+
+            if(generado.status == 0){
+                return response.status(403).json({ success: false, message: 'QR aun no autorizado' });
+            }
+
+            if(generado.status > 1){
+                return response.status(403).json({ success: false, message: 'Operacion ya ha sido revertida' });
+            }
+
+            generado.status = 2;
+            await generado.save();
             
-            return response.json({success:true,message:'Revertido '+id})
+
+            const results = { id} 
+            return response.json({success:true,message:'Operacion revertida ', results})
         } catch (error) {
             console.log(error)
             return response.status(500).json({success:false,error:'Error de servidor contactar con administrador'})
