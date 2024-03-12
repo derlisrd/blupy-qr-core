@@ -1,5 +1,6 @@
 import Comercio from '#models/comercio';
 import Generado from '#models/generado';
+import Moneda from '#models/moneda';
 import { generarQRValidator } from '#validators/generar';
 import type { HttpContext } from '@adonisjs/core/http'
 
@@ -11,6 +12,11 @@ export default class GeneradosComerciosController {
             await generarQRValidator.validate(data)
             const req = request.only(['monto','descripcion','comercio_id','moneda_id'])
             const idMoneda = req.moneda_id ?? 1;
+            const monedaFind = await Moneda.find(idMoneda);
+            if(!monedaFind){
+                return response.status(404).json({success:false,message:"No existe id de moneda"})
+            }
+            
             const comercioFind = await Comercio.find(req.comercio_id);
 
             if(!comercioFind){
