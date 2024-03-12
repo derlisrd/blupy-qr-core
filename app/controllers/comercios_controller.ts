@@ -19,7 +19,7 @@ export default class ComerciosController {
         }
     }
 
-    async store({request,response} : HttpContext){
+    async store({response} : HttpContext){
         try {
             
         } catch (error) {
@@ -28,7 +28,7 @@ export default class ComerciosController {
         }
     }
 
-    async update({request,response} : HttpContext){
+    async update({response} : HttpContext){
         try {
             
         } catch (error) {
