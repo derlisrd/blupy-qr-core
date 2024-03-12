@@ -41,7 +41,7 @@ export default class GeneradosComerciosController {
             })
         } catch (error) {
             console.log(error)
-            const message = error.messages[0]['message'] ?? 'Error de servidor';
+            const message = 'Error de servidor';
             return response.status(error.status).json({success:false,message})
         }
     }
