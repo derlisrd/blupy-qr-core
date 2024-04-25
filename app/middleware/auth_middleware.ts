@@ -12,12 +12,16 @@ export default class AuthMiddleware {
    */
   //redirectTo = '/login'
 
-  async handle(ctx: HttpContext,next: NextFn,options: {guards?: (keyof Authenticators)[]} = {}) {
+  async handle(
+    ctx: HttpContext,
+    next: NextFn,
+    options: { guards?: (keyof Authenticators)[] } = {}
+  ) {
     try {
-      await ctx.auth.authenticateUsing(options.guards/* , { loginRoute: this.redirectTo } */)
+      await ctx.auth.authenticateUsing(options.guards /* , { loginRoute: this.redirectTo } */)
       return next()
     } catch (error) {
-      return ctx.response.status(401).json({success:'false',message:'Unauthorize'})
+      return ctx.response.status(401).json({ success: false, message: 'Unauthorize' })
     }
   }
 }
