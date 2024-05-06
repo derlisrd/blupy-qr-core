@@ -5,15 +5,17 @@ export default class extends BaseSchema {
 
   async up() {
     this.schema.createTable(this.tableName, (table) => {
-      table.uuid('id').primary()
-      table.integer('comercio_id')
+      table.increments('id').notNullable()
+      table
+        .integer('comercio_id')
         .unsigned()
         .references('id')
         .inTable('comercios')
         .onDelete('CASCADE')
         .onUpdate('CASCADE')
-        
-      table.integer('moneda_id').defaultTo(1)
+      table
+        .integer('moneda_id')
+        .defaultTo(1)
         .unsigned()
         .references('id')
         .inTable('monedas')
@@ -22,14 +24,10 @@ export default class extends BaseSchema {
 
       table.string('numero_cuenta').nullable()
       table.text('descripcion').nullable()
-      table.double('monto',20,2)
+      table.double('monto', 20, 2)
       table.integer('cuotas').defaultTo(0)
-      
-
       table.text('numero_movimiento').nullable()
       table.tinyint('status').defaultTo(0)
-
-
       table.timestamp('created_at')
       table.timestamp('updated_at')
     })

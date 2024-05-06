@@ -3,26 +3,26 @@ import type { HttpContext } from '@adonisjs/core/http'
 import type { NextFn } from '@adonisjs/core/types/http'
 
 export default class XapikeyMiddleware {
-  async handle({response,request}: HttpContext, next: NextFn) {
+  async handle({ response, request }: HttpContext, next: NextFn) {
     /**
      * Middleware logic goes here (before the next call)
      */
     //console.log(ctx)
     const apiKey = request.header('x-api-key')
-    const userApiKey  = request.header('user-api-key')
+    //const userApiKey = request.header('user-api-key')
 
-    const foundApi = await Key.findBy('user_id',`${userApiKey}`)
-
-    if(!foundApi){
-      return response.status(401).json({ success:false,message:'Keys invalidas' })
+    //const foundApi = await Key.findBy('user_id', `${userApiKey}`)
+    const foundApi = await Key.findBy('key', `${apiKey}`)
+    if (!foundApi) {
+      return response.status(401).json({ success: false, message: 'Keys invalidas' })
     }
 
-    if(foundApi.activo == 0){
-      return response.status(401).json({ success:false,message:'Keys desactivada' })
+    if (foundApi.activo === 0) {
+      return response.status(401).json({ success: false, message: 'Keys desactivada' })
     }
 
     if (!apiKey || apiKey !== foundApi.key) {
-      return response.status(401).json({ success:false,message:'API KEY invalido' })
+      return response.status(401).json({ success: false, message: 'API KEY invalido' })
     }
     /**
      * Call next method in the pipeline and return its output

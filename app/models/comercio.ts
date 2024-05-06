@@ -6,20 +6,19 @@ export default class Comercio extends BaseModel {
   declare id: number
 
   @column()
-  declare nombre:string
-  
-  @column()
-  declare descripcion:string
+  declare nombre: string
 
   @column()
-  declare sucursal:string
+  declare descripcion: string
 
   @column()
-  declare key:string
-  
-  @column()
-  declare logo:string
+  declare sucursal: string
 
+  @column()
+  declare key: string
+
+  @column()
+  declare logo: string
 
   @column.dateTime({ autoCreate: true })
   declare createdAt: DateTime
