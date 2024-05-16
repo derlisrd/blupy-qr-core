@@ -10,7 +10,7 @@ export const generarQRValidator = vine.compile(
 
 export const autorizarQRValidator = vine.compile(
   vine.object({
-    id: vine.string() || vine.number,
+    id: vine.number(),
     numero_cuenta: vine.number(),
   })
 )
