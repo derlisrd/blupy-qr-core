@@ -66,7 +66,7 @@ export default class GeneradosComerciosController {
       if (!generado) {
         return response.status(404).json({ success: false, message: 'No autorizado' })
       }
-      const cincoMinutos = 5 * 60 * 1000 // 5 minutos en milisegundos
+      /* const cincoMinutos = 5 * 60 * 1000
       const tiempoActual = new Date().getTime()
       const tiempoCreacion = new Date(`${generado.createdAt}`).getTime()
 
@@ -74,7 +74,7 @@ export default class GeneradosComerciosController {
         return response
           .status(403)
           .json({ success: false, message: 'QR vencido. Debe generar otro' })
-      }
+      } */
 
       if (generado.status === 0) {
         return response.status(403).json({ success: false, message: 'QR aun no autorizado' })
