@@ -1,5 +1,6 @@
 //import env from '#start/env'
 
+import env from '#start/env'
 import axios from 'axios'
 
 export const RegistrarTransaccion = async (
@@ -19,17 +20,12 @@ export const RegistrarTransaccion = async (
       MvCod: 1,
     },
   }
-  const res = await axios.post(
-    'https://desa.micredito.com.py/rest/api/RegistroTrn',
-    datosParaApiInfinita,
-    {
-      headers: {
-        'Authorization':
-          'Bearer e9bb2db8-b754-466e-95be-192232dc7d8c!0cbe9957deef47bf62d7e357fe271ccc57b29c1cbb6ffce02d528d48d08e5dfd1d52c6a83566c5',
-        'Content-Type': 'application/json',
-      },
-    }
-  )
+  const res = await axios.post(`${env.get('INFINITA_URL_API')}/RegistroTrn`, datosParaApiInfinita, {
+    headers: {
+      'Authorization': env.get('AUTH_INFINITA'),
+      'Content-Type': 'application/json',
+    },
+  })
   return res
 }
 /**

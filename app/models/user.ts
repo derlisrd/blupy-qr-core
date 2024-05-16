@@ -6,13 +6,11 @@ import { BaseModel, column } from '@adonisjs/lucid/orm'
 import { DbAccessTokensProvider } from '@adonisjs/auth/access_tokens'
 
 const AuthFinder = withAuthFinder(() => hash.use('scrypt'), {
-  uids: ['email','doc'],
+  uids: ['email', 'doc'],
   passwordColumnName: 'password',
 })
 
 export default class User extends compose(BaseModel, AuthFinder) {
-  
-  
   @column({ isPrimary: true })
   declare id: number
 
@@ -27,10 +25,10 @@ export default class User extends compose(BaseModel, AuthFinder) {
 
   @column({ serializeAs: null })
   declare password: string
-  
+
   @column()
   declare first: number
-  
+
   @column()
   declare rol: number
 
@@ -41,8 +39,8 @@ export default class User extends compose(BaseModel, AuthFinder) {
   declare updatedAt: DateTime | null
 
   static accessTokens = DbAccessTokensProvider.forModel(User, {
-    expiresIn: '90 days',
-    prefix: 'oat_',
+    expiresIn: '20 minutes',
+    prefix: 'jwt_',
     table: 'auth_access_tokens',
     type: 'auth_token',
     tokenSecretLength: 40,

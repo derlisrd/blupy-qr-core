@@ -30,14 +30,14 @@ router
     ])
   })
   .prefix('comercio')
-  .use(middleware.auth())
+  .use(middleware.jwt())
 
 router
   .group(() => {
     router.get('/comercios', [ComerciosController, 'index']).use(middleware.rol(2))
   })
   .prefix('admin')
-  .use(middleware.auth())
+  .use(middleware.jwt())
 
 router
   .group(() => {
