@@ -58,6 +58,7 @@ export default class GeneradosClientesController {
         comercio: generado.comercio.nombre,
         numero_movimiento: generado.numero_movimiento,
       }
+      console.log('result', results)
       return response.json({ success: true, message: 'Autorizado', results })
     } catch (error) {
       console.log(error)
