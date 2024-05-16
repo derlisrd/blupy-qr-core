@@ -29,15 +29,17 @@ export default class GeneradosClientesController {
       }
 
       // esto realizar si es externo
-      const res = await RegistrarTransaccion(
-        generado.monto,
-        req.numero_cuenta,
-        generado.descripcion
-      )
-      if (res.data.Retorno === 'ERROR' || res.status !== 200) {
-        return response
-          .status(400)
-          .json({ success: false, message: 'Ocurrio un error al autorizar' })
+      if (req.numero_cuenta > 0) {
+        const res = await RegistrarTransaccion(
+          generado.monto,
+          req.numero_cuenta,
+          generado.descripcion
+        )
+        if (res.data.Retorno === 'ERROR' || res.status !== 200) {
+          return response
+            .status(400)
+            .json({ success: false, message: 'Ocurrio un error al autorizar' })
+        }
       }
 
       generado.status = 1
