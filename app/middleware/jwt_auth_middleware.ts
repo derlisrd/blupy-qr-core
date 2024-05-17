@@ -19,10 +19,10 @@ export default class JwtAuthMiddleware {
     const token = authorization.replace('Bearer ', '')
 
     try {
-      const decoded = jwt.verify(token, env.get('JWT_SECRET', ''))
+      //const decoded =
+      jwt.verify(token, env.get('JWT_SECRET', ''))
       // Agregar el usuario decodificado al contexto
       //request['user'] = decoded
-      console.log(decoded)
       await next()
     } catch (error) {
       return response.unauthorized({ success: false, message: 'Invalid token' })
