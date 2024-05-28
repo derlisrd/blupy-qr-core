@@ -16,7 +16,7 @@ export default class Generado extends BaseModel {
   } */
 
   @column({ isPrimary: true })
-  declare id: string
+  declare id: number
 
   @column()
   declare monto: number
@@ -32,6 +32,12 @@ export default class Generado extends BaseModel {
 
   @column()
   declare moneda_id: number
+  @column()
+  declare condicion_venta: number
+  @column()
+  declare detalle: string
+  @column()
+  declare adicional: string
 
   @belongsTo(() => Moneda, {
     foreignKey: 'moneda_id',

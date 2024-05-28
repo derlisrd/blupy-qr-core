@@ -12,7 +12,10 @@ export default class GeneradosComerciosController {
       const req = request.only([
         'monto',
         'descripcion',
+        'detalle',
+        'condicion_venta',
         'comercio_id',
+        'adicional',
         'moneda_id',
         'numero_movimiento',
       ])
@@ -32,6 +35,9 @@ export default class GeneradosComerciosController {
         monto: req.monto,
         descripcion: req.descripcion,
         comercio_id: req.comercio_id,
+        condicion_venta: req.condicion_venta,
+        detalle: req.detalle,
+        adicional: req.adicional,
         moneda_id: idMoneda,
         numero_movimiento: req.numero_movimiento,
       })
@@ -45,6 +51,9 @@ export default class GeneradosComerciosController {
           id: generado.id,
           monto: generado.monto,
           descripcion: generado.descripcion,
+          detalle: generado.detalle,
+          condicion_venta: generado.condicion_venta,
+          condicion: generado.condicion_venta === 1 ? 'Contado' : 'Credito',
           moneda: generado.moneda.abreviatura,
           comercio: generado.comercio.nombre,
           sucursal: generado.comercio.sucursal,
@@ -88,6 +97,7 @@ export default class GeneradosComerciosController {
         moneda: generado.moneda.abreviatura,
         cuotas: generado.cuotas,
         descripcion: generado.descripcion,
+        condicion_venta: generado.condicion_venta,
         fecha: generado.createdAt,
       }
       return response.json({ success: true, message: 'Autorizado', results })

@@ -24,6 +24,9 @@ export default class extends BaseSchema {
 
       table.string('numero_cuenta').nullable()
       table.text('descripcion').nullable()
+      table.text('detalle').nullable()
+      table.text('adicional').nullable()
+      table.tinyint('condicion_venta').nullable().defaultTo(1)
       table.double('monto', 20, 2)
       table.integer('cuotas').defaultTo(0)
       table.text('numero_movimiento').nullable()

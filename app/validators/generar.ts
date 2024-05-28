@@ -5,6 +5,7 @@ export const generarQRValidator = vine.compile(
     comercio_id: vine.number(),
     monto: vine.number(),
     descripcion: vine.string(),
+    condicion_venta: vine.number(),
   })
 )
 
