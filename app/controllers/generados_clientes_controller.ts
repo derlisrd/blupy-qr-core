@@ -28,6 +28,7 @@ export default class GeneradosClientesController {
         return response.status(403).json({ success: false, message: 'QR ya autorizado' })
       }
 
+      let TcMovNro = ''
       // esto realizar si es externo
       if (req.numero_cuenta > 0) {
         const res = await RegistrarTransaccion(
@@ -40,9 +41,11 @@ export default class GeneradosClientesController {
             .status(400)
             .json({ success: false, message: 'Ocurrio un error al autorizar' })
         }
+        TcMovNro = res.data.TcMovNro
       }
 
       generado.status = 1
+      generado.numero_movimiento = TcMovNro
       generado.numero_cuenta = req.numero_cuenta
       await generado.save()
 
@@ -56,9 +59,9 @@ export default class GeneradosClientesController {
         id: generado.id,
         fecha: generado.createdAt,
         comercio: generado.comercio.nombre,
-        numero_movimiento: generado.numero_movimiento,
+        numero_movimiento: TcMovNro,
       }
-      console.log('result', results)
+      //console.log('result', results)
       return response.json({ success: true, message: 'Autorizado', results })
     } catch (error) {
       console.log(error)

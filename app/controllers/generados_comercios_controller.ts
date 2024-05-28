@@ -2,6 +2,7 @@ import Comercio from '#models/comercio'
 import Generado from '#models/generado'
 import Moneda from '#models/moneda'
 import { generarQRValidator } from '#validators/generar'
+import { errors } from '@vinejs/vine'
 import type { HttpContext } from '@adonisjs/core/http'
 
 export default class GeneradosComerciosController {
@@ -63,7 +64,11 @@ export default class GeneradosComerciosController {
       })
     } catch (error) {
       console.log(error)
-      const message = 'Error de servidor'
+      let message = 'Error de servidor'
+      if (error instanceof errors.E_VALIDATION_ERROR) {
+        // array created by SimpleErrorReporter
+        message = error.messages[0].message
+      }
       return response.status(error.status).json({ success: false, message })
     }
   }
@@ -94,11 +99,13 @@ export default class GeneradosComerciosController {
         id: generado.id,
         numero_cuenta: generado.numero_cuenta,
         monto: generado.monto,
+        numero_movimiento: generado.numero_movimiento,
         moneda: generado.moneda.abreviatura,
         cuotas: generado.cuotas,
         descripcion: generado.descripcion,
         condicion_venta: generado.condicion_venta,
         fecha: generado.createdAt,
+        adicional: generado.adicional,
       }
       return response.json({ success: true, message: 'Autorizado', results })
     } catch (error) {
@@ -107,7 +114,7 @@ export default class GeneradosComerciosController {
         .json({ success: false, error: 'Error de servidor contactar con administrador' })
     }
   }
-
+  /* revertir pago  */
   async revertirPago({ request, response }: HttpContext) {
     try {
       const { id } = request.only(['id'])
