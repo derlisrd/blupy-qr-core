@@ -6,12 +6,12 @@ export default class Moneda extends BaseModel {
   declare id: number
 
   @column()
-  declare denominacion:string
+  declare denominacion: string
   @column()
-  declare abreviatura:string
-  
+  declare abreviatura: string
+
   @column()
-  declare valor:number
+  declare valor: number
 
   @column.dateTime({ autoCreate: true })
   declare createdAt: DateTime

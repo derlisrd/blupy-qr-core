@@ -19,6 +19,7 @@ export default class GeneradosComerciosController {
         'adicional',
         'moneda_id',
         'numero_movimiento',
+        'numero_comprobante',
       ])
       const idMoneda = req.moneda_id ?? 1
       const monedaFind = await Moneda.find(idMoneda)
@@ -41,6 +42,7 @@ export default class GeneradosComerciosController {
         adicional: req.adicional,
         moneda_id: idMoneda,
         numero_movimiento: req.numero_movimiento,
+        numero_comprobante: req.numero_comprobante,
       })
 
       await generado.load('moneda')
@@ -58,6 +60,7 @@ export default class GeneradosComerciosController {
           moneda: generado.moneda.abreviatura,
           comercio: generado.comercio.nombre,
           sucursal: generado.comercio.sucursal,
+          numero_comprobante: generado.numero_comprobante,
           numero_movimiento: generado.numero_movimiento,
           fecha: generado.createdAt,
         },

@@ -30,6 +30,7 @@ export default class extends BaseSchema {
       table.double('monto', 20, 2)
       table.integer('cuotas').defaultTo(0)
       table.text('numero_movimiento').nullable()
+      table.text('numero_comprobante').nullable()
       table.tinyint('status').defaultTo(0)
       table.timestamp('created_at')
       table.timestamp('updated_at')

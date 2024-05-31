@@ -48,6 +48,9 @@ export default class Generado extends BaseModel {
   declare numero_movimiento: string
 
   @column()
+  declare numero_comprobante: string
+
+  @column()
   declare comercio_id: number
 
   @belongsTo(() => Comercio, {
