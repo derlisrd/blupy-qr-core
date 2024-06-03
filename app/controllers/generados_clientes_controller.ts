@@ -12,7 +12,7 @@ export default class GeneradosClientesController {
       await autorizarQRValidator.validate(req)
 
       const generado = await Generado.find(req.id)
-      if (!generado) {
+      if (generado == null) {
         return response.status(404).json({ success: false, message: 'QR inexistente.' })
       }
 
@@ -59,14 +59,14 @@ export default class GeneradosClientesController {
         id: generado.id,
         fecha: generado.createdAt,
         comercio: generado.comercio.nombre,
-        numero_movimiento: TcMovNro,
+        numero_movimiento: TcMovNro
       }
-      //console.log('result', results)
+      // console.log('result', results)
       return response.json({ success: true, message: 'Autorizado', results })
     } catch (error) {
       console.log(error)
-      const message = error.messages[0]['message'] ?? 'Error de servidor'
-      return response.status(error.status).json({ success: false, message })
+      const message = error.messages[0].message ?? 'Error de servidor'
+      return response.status(500).json({ success: false, message })
     }
   }
 
@@ -74,7 +74,7 @@ export default class GeneradosClientesController {
     try {
       const id = request.param('id')
       const generado = await Generado.find(id)
-      if (!generado) {
+      if (generado == null) {
         return response.status(404).json({ success: false, message: 'No existe qr' })
       }
       const cincoMinutos = 5 * 60 * 1000 // 5 minutos en milisegundos
@@ -92,9 +92,10 @@ export default class GeneradosClientesController {
         comercio: generado.comercio.nombre,
         sucursal: generado.comercio.sucursal,
         descripcion: generado.descripcion,
+        condicion: generado.condicion_venta,
         status: generado.status,
         monto: generado.monto,
-        moneda: generado.moneda.abreviatura,
+        moneda: generado.moneda.abreviatura
       }
 
       return { success: true, results }

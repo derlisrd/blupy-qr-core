@@ -7,11 +7,11 @@
 |
 */
 
+import router from '@adonisjs/core/services/router'
+import { middleware } from '#start/kernel'
 const AuthController = () => import('#controllers/auth_controller')
 const GeneradosClientesController = () => import('#controllers/generados_clientes_controller')
 const GeneradosComerciosController = () => import('#controllers/generados_comercios_controller')
-import router from '@adonisjs/core/services/router'
-import { middleware } from '#start/kernel'
 const ComerciosController = () => import('#controllers/comercios_controller')
 
 router
@@ -24,10 +24,8 @@ router
   .group(() => {
     router.post('/generar-qr', [GeneradosComerciosController, 'generarQR'])
     router.put('/revertir-pago', [GeneradosComerciosController, 'revertirPago'])
-    router.get('/consultar-autorizacion/:id', [
-      GeneradosComerciosController,
-      'consultarAutorizacion',
-    ])
+    router.get('/consultar-autorizacion/:id', [GeneradosComerciosController,'consultarAutorizacion'])
+    router.put('/actualizar-movimiento',[GeneradosComerciosController,'actualizarMovimiento'])
   })
   .prefix('comercio')
   .use(middleware.jwt())

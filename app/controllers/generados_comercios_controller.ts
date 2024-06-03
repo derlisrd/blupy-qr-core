@@ -19,17 +19,17 @@ export default class GeneradosComerciosController {
         'adicional',
         'moneda_id',
         'numero_movimiento',
-        'numero_comprobante',
+        'numero_comprobante'
       ])
       const idMoneda = req.moneda_id ?? 1
       const monedaFind = await Moneda.find(idMoneda)
-      if (!monedaFind) {
+      if (monedaFind == null) {
         return response.status(404).json({ success: false, message: 'No existe id de moneda' })
       }
 
       const comercioFind = await Comercio.find(req.comercio_id)
 
-      if (!comercioFind) {
+      if (comercioFind == null) {
         return response.status(404).json({ success: false, message: 'ID de comercio no valido' })
       }
 
@@ -42,7 +42,7 @@ export default class GeneradosComerciosController {
         adicional: req.adicional,
         moneda_id: idMoneda,
         numero_movimiento: req.numero_movimiento,
-        numero_comprobante: req.numero_comprobante,
+        numero_comprobante: req.numero_comprobante
       })
 
       await generado.load('moneda')
@@ -62,8 +62,8 @@ export default class GeneradosComerciosController {
           sucursal: generado.comercio.sucursal,
           numero_comprobante: generado.numero_comprobante,
           numero_movimiento: generado.numero_movimiento,
-          fecha: generado.createdAt,
-        },
+          fecha: generado.createdAt
+        }
       })
     } catch (error) {
       console.log(error)
@@ -72,7 +72,7 @@ export default class GeneradosComerciosController {
         // array created by SimpleErrorReporter
         message = error.messages[0].message
       }
-      return response.status(error.status).json({ success: false, message })
+      return response.status(500).json({ success: false, message })
     }
   }
 
@@ -80,7 +80,7 @@ export default class GeneradosComerciosController {
     try {
       const id = request.param('id')
       const generado = await Generado.find(id)
-      if (!generado) {
+      if (generado == null) {
         return response.status(404).json({ success: false, message: 'No autorizado' })
       }
       /* const cincoMinutos = 5 * 60 * 1000
@@ -108,7 +108,7 @@ export default class GeneradosComerciosController {
         descripcion: generado.descripcion,
         condicion_venta: generado.condicion_venta,
         fecha: generado.createdAt,
-        adicional: generado.adicional,
+        adicional: generado.adicional
       }
       return response.json({ success: true, message: 'Autorizado', results })
     } catch (error) {
@@ -117,12 +117,37 @@ export default class GeneradosComerciosController {
         .json({ success: false, error: 'Error de servidor contactar con administrador' })
     }
   }
+
+  async actualizarMovimiento({ request, response }: HttpContext) {
+    try {
+      const req = request.only(['id','detalle','numero_comprobante','adicional','comercio_id'])
+      const generado = await Generado.find(req.id)
+      if (generado == null) {
+        return response.status(400).json({ success: false, message: 'No existe movimiento' })
+      }
+      if (generado.status === 0) {
+        return response.status(400).json({ success: false, message: 'Movimiento no autorizado por el cliente.' })
+      }
+      if (generado.comercio_id !== req.comercio_id) {
+        return response.status(400).json({ success: false, message: 'Comercio no corresponde al movimiento.' })
+      }
+      generado.numero_comprobante = req.numero_comprobante
+      generado.detalle = req.detalle
+      generado.adicional = req.adicional
+      generado.save()
+      return response.json({ success: true, message: 'Movimiento actualizado' })
+    } catch (error) {
+      console.log(error)
+      return response.status(500).json({ success: false, message: 'Error en el servidor' })
+    }
+  }
+
   /* revertir pago  */
   async revertirPago({ request, response }: HttpContext) {
     try {
       const { id } = request.only(['id'])
       const generado = await Generado.find(id)
-      if (!generado) {
+      if (generado == null) {
         return response.status(404).json({ success: false, message: 'No autorizado' })
       }
 
