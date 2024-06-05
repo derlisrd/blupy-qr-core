@@ -74,8 +74,12 @@ export default class GeneradosClientesController {
     try {
       const id = request.param('id')
       const generado = await Generado.find(id)
+
       if (generado == null) {
         return response.status(404).json({ success: false, message: 'No existe qr' })
+      }
+      if (generado.status === 1) {
+        return response.status(403).json({ success: false, message: 'QR inválido' })
       }
       const cincoMinutos = 5 * 60 * 1000 // 5 minutos en milisegundos
       const tiempoActual = new Date().getTime()
