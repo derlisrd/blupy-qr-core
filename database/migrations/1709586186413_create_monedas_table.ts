@@ -6,10 +6,10 @@ export default class extends BaseSchema {
   async up() {
     this.schema.createTable(this.tableName, (table) => {
       table.increments('id')
-      
+
       table.string('denominacion')
       table.string('abreviatura')
-      table.double('valor',20,2);
+      table.double('valor',20,2)
 
       table.timestamp('created_at')
       table.timestamp('updated_at')
