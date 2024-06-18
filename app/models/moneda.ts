@@ -7,6 +7,7 @@ export default class Moneda extends BaseModel {
 
   @column()
   declare denominacion: string
+
   @column()
   declare abreviatura: string
 

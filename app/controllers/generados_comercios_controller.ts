@@ -1,11 +1,13 @@
 import Comercio from '#models/comercio'
 import Generado from '#models/generado'
 import Moneda from '#models/moneda'
+import GeneradoAuditoria from '#models/generados_auditoria'
 import { generarQRValidator } from '#validators/generar'
 import { errors } from '@vinejs/vine'
 import type { HttpContext } from '@adonisjs/core/http'
 
 export default class GeneradosComerciosController {
+
   async generarQR({ request, response }: HttpContext) {
     try {
       const data = request.all()
@@ -43,6 +45,11 @@ export default class GeneradosComerciosController {
         moneda_id: idMoneda,
         numero_movimiento: req.numero_movimiento,
         numero_comprobante: req.numero_comprobante
+      })
+
+      await GeneradoAuditoria.create({
+        generado_id: generado.id,
+        status: 'GENERADO'
       })
 
       await generado.load('moneda')

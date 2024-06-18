@@ -10,7 +10,7 @@ export default class ComerciosController {
       return response.json({
         success: true,
         meta: data.getMeta(),
-        results: data.all(),
+        results: data.all()
       })
     } catch (error) {
       console.log(error)
@@ -20,6 +20,7 @@ export default class ComerciosController {
 
   async store({ response }: HttpContext) {
     try {
+      //
     } catch (error) {
       console.log(error)
       return response.status(error.status).json({ success: false, message: 'Error de servidor' })
@@ -28,6 +29,7 @@ export default class ComerciosController {
 
   async update({ response }: HttpContext) {
     try {
+      //
     } catch (error) {
       console.log(error)
       return response.status(error.status).json({ success: false, message: 'Error de servidor' })

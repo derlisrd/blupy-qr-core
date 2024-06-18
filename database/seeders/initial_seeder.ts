@@ -12,12 +12,12 @@ export default class extends BaseSeeder {
       nombre: 'Admin',
       password: '12345',
       doc: '000',
-      rol: 0,
+      rol: 0
     })
 
     await Comercio.create({ nombre: 'Farma', sucursal: '12', descripcion: 'a' })
 
-    await Key.create({ key: env.get('KEY_BASE'), user_id: 1 })
+    await Key.create({ key: env.get('KEY_BASE'), user_id: 1, activo: 1 })
 
     await Moneda.create({ denominacion: 'Guarani', abreviatura: 'GS', valor: 1 })
   }

@@ -2,14 +2,12 @@ import { DateTime } from 'luxon'
 import { BaseModel, /* beforeCreate, */ belongsTo, column } from '@adonisjs/lucid/orm'
 // import { randomUUID } from 'node:crypto'
 import Comercio from './comercio.js'
-import { BelongsTo } from '@adonisjs/lucid/types/relations'
+import type { BelongsTo } from '@adonisjs/lucid/types/relations'
 import Moneda from './moneda.js'
 
 export default class Generado extends BaseModel {
 
-  static get table() {
-    return 'generados'
-  }
+  protected tableName = 'generados'
 
   /* @beforeCreate()
   static async setID(generado: Generado) {

@@ -1,4 +1,5 @@
 import Generado from '#models/generado'
+import GeneradoAuditoria from '#models/generados_auditoria'
 import { RegistrarTransaccion } from '#services/infinita_service'
 
 import { autorizarQRValidator } from '#validators/generar'
@@ -12,6 +13,7 @@ export default class GeneradosClientesController {
       await autorizarQRValidator.validate(req)
 
       const generado = await Generado.find(req.id)
+      const auditoria = await GeneradoAuditoria.findByOrFail('generado_id',req.id)
       if (generado == null) {
         return response.status(404).json({ success: false, message: 'QR inexistente.' })
       }
@@ -49,6 +51,12 @@ export default class GeneradosClientesController {
       generado.numero_cuenta = req.numero_cuenta
       await generado.save()
 
+      auditoria.telefono = req.telefono
+      auditoria.localizacion = req.localizacion
+      auditoria.ip_user = req.ip
+      auditoria.status = 'AUTORIZADO'
+      await auditoria.save()
+
       await generado.load('moneda')
       await generado.load('comercio')
 
@@ -59,7 +67,8 @@ export default class GeneradosClientesController {
         id: generado.id,
         fecha: generado.createdAt,
         comercio: generado.comercio.nombre,
-        numero_movimiento: TcMovNro
+        numero_movimiento: TcMovNro,
+        numero_cuenta: req.numero_cuenta
       }
       // console.log('result', results)
       return response.json({ success: true, message: 'Autorizado', results })

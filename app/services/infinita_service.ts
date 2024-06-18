@@ -1,4 +1,4 @@
-//import env from '#start/env'
+// import env from '#start/env'
 
 import env from '#start/env'
 import axios from 'axios'
@@ -17,14 +17,14 @@ export const RegistrarTransaccion = async (
       TcPlanId: 1,
       TcComId: 1,
       TcMovCuC: 1,
-      MvCod: 1,
-    },
+      MvCod: 1
+    }
   }
   const res = await axios.post(`${env.get('INFINITA_URL_API')}/RegistroTrn`, datosParaApiInfinita, {
     headers: {
-      'Authorization': env.get('AUTH_INFINITA'),
-      'Content-Type': 'application/json',
-    },
+      Authorization: env.get('AUTH_INFINITA'),
+      'Content-Type': 'application/json'
+    }
   })
   return res
 }
@@ -44,10 +44,10 @@ export const RegistrarTransaccion = async (
 }
        */
 
-//return datosParaApiInfinita;
-//return { numero_movimiento: "12" }
-//}
-//export const RevertirTransaccion = async(numero_movimiento: string | number)=>{
+// return datosParaApiInfinita;
+// return { numero_movimiento: "12" }
+// }
+// export const RevertirTransaccion = async(numero_movimiento: string | number)=>{
 /* const datosParaApiInfinita = {
         "TcMovNro": numero_movimiento
       }   */
@@ -87,6 +87,6 @@ export const RegistrarTransaccion = async (
 }
        */
 
-//return datosParaApiInfinita;
+// return datosParaApiInfinita;
 //  return { numero_movimiento: "12" }
-//}
+// }

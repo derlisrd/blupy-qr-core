@@ -1,13 +1,10 @@
 import { DateTime } from 'luxon'
 import { BaseModel, belongsTo, column } from '@adonisjs/lucid/orm'
-import { BelongsTo } from '@adonisjs/lucid/types/relations'
+import type { BelongsTo } from '@adonisjs/lucid/types/relations'
 import Generado from './generado.js'
 
 export default class GeneradoAuditoria extends BaseModel {
-
-  static get table() {
-    return 'generados_auditorias'
-  }
+  static table = 'generados_auditorias'
 
   @column({ isPrimary: true })
   declare id: number
@@ -30,7 +27,7 @@ export default class GeneradoAuditoria extends BaseModel {
   @belongsTo(() => Generado, {
     foreignKey: 'generado_id'
   })
-  declare moneda: BelongsTo<typeof Generado>
+  declare generado: BelongsTo<typeof Generado>
 
   @column.dateTime({ autoCreate: true })
   declare createdAt: DateTime

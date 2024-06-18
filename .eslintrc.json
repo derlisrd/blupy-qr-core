@@ -23,6 +23,8 @@
       "padded-blocks":"off",
       "no-trailing-spaces":"off",
       "no-unused-vars":"warn",
-      "@typescript-eslint/class-literal-property-style": "off"
+      "@typescript-eslint/class-literal-property-style": "off",
+      "@typescript-eslint/naming-convention": "off",
+      "@typescript-eslint/consistent-type-imports": "off"
     }
 }
