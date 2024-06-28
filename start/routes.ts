@@ -23,7 +23,7 @@ router
 router
   .group(() => {
     router.post('/generar-qr', [GeneradosComerciosController, 'generarQR'])
-    router.delete('/anular', [GeneradosComerciosController, 'anular'])
+    router.delete('/anular/:id', [GeneradosComerciosController, 'anular'])
     router.put('/revertir-pago', [GeneradosComerciosController, 'revertirPago'])
     router.get('/consultar-autorizacion/:id', [GeneradosComerciosController,'consultarAutorizacion'])
     router.put('/actualizar-movimiento',[GeneradosComerciosController,'actualizarMovimiento'])

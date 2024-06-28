@@ -95,7 +95,7 @@ export default class GeneradosComerciosController {
       generado.status = 2;
       await auditoria.save()
       await generado.save()
-
+      return response.json({success:true,message:'QR anulada'})
     } catch (error) {
       console.log(error)
       return response
