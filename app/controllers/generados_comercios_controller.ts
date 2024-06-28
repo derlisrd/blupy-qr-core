@@ -83,6 +83,28 @@ export default class GeneradosComerciosController {
     }
   }
 
+  async anular({request, response}: HttpContext){
+    try {
+      const id = request.param('id')
+      const generado = await Generado.find(id)
+      const auditoria = await GeneradoAuditoria.findByOrFail('generado_id',id)
+      if (generado == null) {
+        return response.status(404).json({ success: false, message: 'QR inexistente.' })
+      }
+      auditoria.status = 'ANULADO'
+      generado.status = 2;
+      await auditoria.save()
+      await generado.save()
+
+    } catch (error) {
+      console.log(error)
+      return response
+        .status(500)
+        .json({ success: false, error: 'Error de servidor contactar con administrador' })
+    }
+  }
+
+
   async consultarAutorizacion({ request, response }: HttpContext) {
     try {
       const id = request.param('id')

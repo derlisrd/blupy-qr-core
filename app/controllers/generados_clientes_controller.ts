@@ -29,6 +29,9 @@ export default class GeneradosClientesController {
       if (generado.status === 1) {
         return response.status(403).json({ success: false, message: 'QR ya autorizado' })
       }
+      if (generado.status === 2) {
+        return response.status(403).json({ success: false, message: 'QR anulado.' })
+      }
 
       let TcMovNro = ''
       // esto realizar si es externo
