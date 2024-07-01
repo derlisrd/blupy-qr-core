@@ -86,8 +86,7 @@ export default class GeneradosComerciosController {
   async anular({ request, response }: HttpContext) {
     try {
       // const id = request.param('id')
-      const req = request.only(['id'])
-      const id = req.id
+      const { id } = request.only(['id'])
       const generado = await Generado.find(id)
       const auditoria = await GeneradoAuditoria.findByOrFail('generado_id',id)
       if (generado == null) {
