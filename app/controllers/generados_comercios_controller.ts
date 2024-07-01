@@ -83,7 +83,7 @@ export default class GeneradosComerciosController {
     }
   }
 
-  async anular({request, response}: HttpContext){
+  async anular({ request, response }: HttpContext) {
     try {
       const id = request.param('id')
       const generado = await Generado.find(id)
@@ -91,11 +91,14 @@ export default class GeneradosComerciosController {
       if (generado == null) {
         return response.status(404).json({ success: false, message: 'QR inexistente.' })
       }
+      if (generado.status === 1) {
+        return response.status(400).json({ success: false, message: 'QR ya fue pagagado' })
+      }
       auditoria.status = 'ANULADO'
-      generado.status = 2;
+      generado.status = 2
       await auditoria.save()
       await generado.save()
-      return response.json({success:true,message:'QR anulada'})
+      return response.json({ success: true, message: 'QR anulada' })
     } catch (error) {
       console.log(error)
       return response
@@ -103,7 +106,6 @@ export default class GeneradosComerciosController {
         .json({ success: false, error: 'Error de servidor contactar con administrador' })
     }
   }
-
 
   async consultarAutorizacion({ request, response }: HttpContext) {
     try {
