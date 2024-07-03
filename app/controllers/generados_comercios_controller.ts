@@ -133,6 +133,7 @@ export default class GeneradosComerciosController {
       const results = {
         id: generado.id,
         numero_cuenta: generado.numero_cuenta,
+        MTNume: 1,
         monto: generado.monto,
         numero_movimiento: generado.numero_movimiento,
         moneda: generado.moneda.abreviatura,
