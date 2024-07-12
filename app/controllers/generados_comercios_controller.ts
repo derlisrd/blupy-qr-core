@@ -15,6 +15,7 @@ export default class GeneradosComerciosController {
       const req = request.only([
         'monto',
         'descripcion',
+        'documento',
         'detalle',
         'condicion_venta',
         'comercio_id',
@@ -37,6 +38,7 @@ export default class GeneradosComerciosController {
 
       const generado = await Generado.create({
         monto: req.monto,
+        documento: req.documento,
         descripcion: req.descripcion,
         comercio_id: req.comercio_id,
         condicion_venta: req.condicion_venta,
@@ -59,6 +61,7 @@ export default class GeneradosComerciosController {
         success: true,
         results: {
           id: generado.id,
+          documento: generado.documento,
           monto: generado.monto,
           descripcion: generado.descripcion,
           detalle: generado.detalle,

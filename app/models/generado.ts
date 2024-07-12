@@ -21,6 +21,9 @@ export default class Generado extends BaseModel {
   declare monto: number
 
   @column()
+  declare documento: string
+
+  @column()
   declare numero_cuenta: string
 
   @column()

@@ -22,6 +22,7 @@ export default class extends BaseSchema {
         .onDelete('CASCADE')
         .onUpdate('CASCADE')
 
+      table.string('documento')
       table.string('numero_cuenta').nullable()
       table.text('descripcion').nullable()
       table.text('detalle').nullable()

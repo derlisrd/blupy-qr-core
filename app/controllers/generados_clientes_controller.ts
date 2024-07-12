@@ -13,6 +13,9 @@ export default class GeneradosClientesController {
       await autorizarQRValidator.validate(req)
 
       const generado = await Generado.find(req.id)
+      if (generado?.documento !== req.documento) {
+        return response.status(401).json({ success: false, message: 'Tu cuenta no coincide con la cédula del QR generado.' })
+      }
       const auditoria = await GeneradoAuditoria.findByOrFail('generado_id',req.id)
       if (generado == null) {
         return response.status(404).json({ success: false, message: 'QR inexistente.' })
