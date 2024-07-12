@@ -18,9 +18,8 @@ export default class GeneradosClientesController {
         return response.status(401).json({ success: false, message: 'Tu cuenta no coincide con la cédula del QR generado.' })
       }
       const auditoria = await GeneradoAuditoria.findByOrFail('generado_id',req.id)
-      if (generado == null) {
-        return response.status(404).json({ success: false, message: 'QR inexistente.' })
-      }
+
+      if (generado == null) return response.status(404).json({ success: false, message: 'QR inexistente.' })
 
       const cincoMinutos = 5 * 60 * 1000 // 5 minutos en milisegundos
       const tiempoActual = new Date().getTime()
