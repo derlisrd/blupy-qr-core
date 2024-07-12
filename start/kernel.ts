@@ -25,7 +25,7 @@ server.errorHandler(() => import('#exceptions/handler'))
 server.use([
   () => import('#middleware/container_bindings_middleware'),
   () => import('#middleware/force_json_response_middleware'),
-  () => import('@adonisjs/cors/cors_middleware'),
+  () => import('@adonisjs/cors/cors_middleware')
 ])
 
 /**
@@ -36,7 +36,7 @@ router.use([
   () => import('@adonisjs/core/bodyparser_middleware'),
   () => import('@adonisjs/auth/initialize_auth_middleware'),
   () => import('#middleware/xapikey_middleware'),
-  () => import('#middleware/request_logger_middleware'),
+  () => import('#middleware/request_logger_middleware')
 ])
 
 /**
@@ -46,5 +46,5 @@ router.use([
 export const middleware = router.named({
   rol: () => import('#middleware/rol_middleware'),
   auth: () => import('#middleware/auth_middleware'),
-  jwt: () => import('#middleware/jwt_auth_middleware'),
+  jwt: () => import('#middleware/jwt_auth_middleware')
 })
