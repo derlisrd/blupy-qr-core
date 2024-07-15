@@ -27,7 +27,7 @@ export default class GeneradosClientesController {
         const saldoRes = res.data.Tarjetas[0].MTSaldo as string
         const saldoTarjeta = parseInt(saldoRes)
         if (saldoTarjeta < generado.monto) {
-          return response.status(400).json({ success: false, message: 'No hay saldo suficiente en saldo.' })
+          return response.status(400).json({ success: false, message: 'No hay saldo suficiente en tu linea.' })
         }
       }
 
