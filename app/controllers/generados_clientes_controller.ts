@@ -22,9 +22,10 @@ export default class GeneradosClientesController {
       if (generado == null) return response.status(404).json({ success: false, message: 'QR inexistente.' })
 
       // si es credito digital controla su saldo
-      if (generado.numero_cuenta !== '0') {
+      if (generado.condicion_venta === 1) {
         const res = await ListarTarjetasPorDoc(generado.documento)
         const saldoRes = res.data.Tarjetas[0].MTSaldo as string
+
         const saldoTarjeta = parseInt(saldoRes)
         if (saldoTarjeta < generado.monto) {
           return response.status(400).json({ success: false, message: 'No hay saldo suficiente en tu linea.' })
