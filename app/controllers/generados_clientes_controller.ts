@@ -1,6 +1,6 @@
 import Generado from '#models/generado'
 import GeneradoAuditoria from '#models/generados_auditoria'
-import { RegistrarTransaccion } from '#services/infinita_service'
+import { ListarTarjetasPorDoc, RegistrarTransaccion } from '#services/infinita_service'
 
 import { autorizarQRValidator } from '#validators/generar'
 import type { HttpContext } from '@adonisjs/core/http'
@@ -20,6 +20,16 @@ export default class GeneradosClientesController {
       const auditoria = await GeneradoAuditoria.findByOrFail('generado_id',req.id)
 
       if (generado == null) return response.status(404).json({ success: false, message: 'QR inexistente.' })
+
+      // si es credito digital controla su saldo
+      if (generado.numero_cuenta !== '0') {
+        const res = await ListarTarjetasPorDoc(generado.documento)
+        const saldoRes = res.data.Tarjetas[0].MTSaldo as string
+        const saldoTarjeta = parseInt(saldoRes)
+        if (saldoTarjeta < generado.monto) {
+          return response.status(400).json({ success: false, message: 'No hay saldo suficiente en saldo.' })
+        }
+      }
 
       const cincoMinutos = 5 * 60 * 1000 // 5 minutos en milisegundos
       const tiempoActual = new Date().getTime()
@@ -126,4 +136,5 @@ export default class GeneradosClientesController {
         .json({ success: false, error: 'Error de servidor contactar con administrador' })
     }
   }
+
 }

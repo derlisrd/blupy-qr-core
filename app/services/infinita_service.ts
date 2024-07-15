@@ -28,65 +28,12 @@ export const RegistrarTransaccion = async (
   })
   return res
 }
-/**
-       *
-       *
-{
-  "Messages": [
-    {
-      "Description": "Los datos han sido agregados.",
-      "Id": "SuccessfullyAdded",
-      "Type": 0
+export const ListarTarjetasPorDoc = async (documento: string) => {
+  const res = await axios.get(`${env.get('INFINITA_URL_API')}/ListarTarjetasPorDoc?Mtdocu=${documento}`, {
+    headers: {
+      Authorization: env.get('AUTH_INFINITA'),
+      'Content-Type': 'application/json'
     }
-  ],
-  "Retorno": "OK",
-  "TcMovNro": "10139"
+  })
+  return res
 }
-       */
-
-// return datosParaApiInfinita;
-// return { numero_movimiento: "12" }
-// }
-// export const RevertirTransaccion = async(numero_movimiento: string | number)=>{
-/* const datosParaApiInfinita = {
-        "TcMovNro": numero_movimiento
-      }   */
-
-/**
-       *
-       *
-{
-  "Messages": [
-    {
-      "Description": "El movimiento ya se encuentra reversado",
-      "Id": "ERROR",
-      "Type": 0
-    }
-  ],
-  "Retorno": "ERROR"
-}
-{
-  "Messages": [
-    {
-      "Description": "El movimiento no existe",
-      "Id": "ERROR",
-      "Type": 0
-    }
-  ],
-  "Retorno": "ERROR"
-}
-{
-  "Messages": [
-    {
-      "Description": "Reverso con éxito.",
-      "Id": "OK",
-      "Type": 0
-    }
-  ],
-  "Retorno": "OK"
-}
-       */
-
-// return datosParaApiInfinita;
-//  return { numero_movimiento: "12" }
-// }
