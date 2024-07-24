@@ -15,20 +15,26 @@ export default class GeneradosClientesController {
       const generado = await Generado.find(req.id)
 
       if (generado?.documento !== req.documento && generado?.numero_cuenta === '0') {
-        return response.status(401).json({ success: false, message: 'Tu cuenta no coincide con la cédula del QR generado.' })
+        return response
+          .status(401)
+          .json({ success: false, message: 'Tu cuenta no coincide con la cédula del QR generado.' })
       }
-      const auditoria = await GeneradoAuditoria.findByOrFail('generado_id',req.id)
+      const auditoria = await GeneradoAuditoria.findByOrFail('generado_id', req.id)
 
-      if (generado == null) return response.status(404).json({ success: false, message: 'QR inexistente.' })
+      if (generado == null) {
+        return response.status(404).json({ success: false, message: 'QR inexistente.' })
+      }
 
       // si es credito digital controla su saldo
       if (generado.condicion_venta === 1) {
         const res = await ListarTarjetasPorDoc(generado.documento)
-        const saldoRes = res.data.Tarjetas[0].MTSaldo as string
-
-        const saldoTarjeta = parseInt(saldoRes)
-        if (saldoTarjeta < generado.monto) {
-          return response.status(400).json({ success: false, message: 'No hay saldo suficiente en tu linea.' })
+        const saldoAdeudado = res.data.Tarjetas[0].MTSaldo as string
+        const saldoDisponible = res.data.Tarjetas[0].MTLinea as string
+        const disponible = parseInt(saldoDisponible) - parseInt(saldoAdeudado)
+        if (disponible < generado.monto) {
+          return response
+            .status(400)
+            .json({ success: false, message: 'No hay saldo suficiente en tu linea.' })
         }
       }
 
@@ -137,5 +143,4 @@ export default class GeneradosClientesController {
         .json({ success: false, error: 'Error de servidor contactar con administrador' })
     }
   }
-
 }
