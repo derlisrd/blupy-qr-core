@@ -23,8 +23,9 @@ jobs:
         key: ${{ secrets.SSH_PRIVATE_KEY }}
         port: 22
         script: |
-          cd /var/www/html/blupy-qr-core/
+          cd /var/www/html/qr-core-desa/
           git pull origin dev
+          npm ci
           npm run build
           cp .env build
           cd build
