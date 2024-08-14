@@ -183,6 +183,7 @@ export default class GeneradosComerciosController {
     try {
       const { id } = request.only(['id'])
       const generado = await Generado.find(id)
+      const auditoria = await GeneradoAuditoria.findByOrFail('generado_id',id)
       if (generado == null) {
         return response.status(404).json({ success: false, message: 'No autorizado' })
       }
@@ -191,13 +192,15 @@ export default class GeneradosComerciosController {
         return response.status(403).json({ success: false, message: 'QR aun no autorizado' })
       }
 
-      if (generado.status > 1) {
+      if (generado.status > 2) {
         return response
           .status(403)
           .json({ success: false, message: 'Operacion ya ha sido revertida' })
       }
 
-      generado.status = 2
+      generado.status = 3
+      auditoria.status = 'REVERTIDO'
+      await auditoria.save()
       await generado.save()
 
       const results = { id }
