@@ -25,7 +25,7 @@ export default class GeneradosClientesController {
       if (generado.condicion_venta === 1) {
         const res = await ListarTarjetasPorDoc(generado.documento)
         const saldoRes = res.data.Tarjetas[0].MTSaldo as string
-
+        console.log(saldoRes)
         const saldoTarjeta = parseInt(saldoRes)
         if (saldoTarjeta < generado.monto) {
           return response.status(400).json({ success: false, message: 'No hay saldo suficiente en tu linea.' })
