@@ -24,11 +24,13 @@ export default class GeneradosClientesController {
       // si es credito digital controla su saldo
       if (generado.condicion_venta === 1) {
         const res = await ListarTarjetasPorDoc(generado.documento)
-        const saldoRes = res.data.Tarjetas[0].MTSaldo as string
-        console.log(res.data)
-        const saldoTarjeta = parseInt(saldoRes)
-        if (saldoTarjeta < generado.monto) {
-          return response.status(400).json({ success: false, message: 'No hay saldo suficiente en tu linea.' })
+        const saldoAdeudado = res.data.Tarjetas[0].MTSaldo as string
+        const saldoDisponible = res.data.Tarjetas[0].MTLinea as string
+        const disponible = parseInt(saldoDisponible) - parseInt(saldoAdeudado)
+        if (disponible < generado.monto) {
+          return response
+            .status(400)
+            .json({ success: false, message: 'No hay saldo suficiente en tu linea.' })
         }
       }
 
