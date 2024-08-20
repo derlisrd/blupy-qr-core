@@ -61,10 +61,12 @@ export default class GeneradosComerciosController {
         success: true,
         results: {
           id: generado.id,
+          imageUrl: 'https://quickchart.io/qr?text=' + generado.id,
           documento: generado.documento,
           monto: generado.monto,
           descripcion: generado.descripcion,
           detalle: generado.detalle,
+          condicionVenta: generado.condicion_venta,
           condicion_venta: generado.condicion_venta,
           condicion: generado.condicion_venta === 1 ? 'Contado' : 'Credito',
           moneda: generado.moneda.abreviatura,
