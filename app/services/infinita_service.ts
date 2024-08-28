@@ -30,7 +30,7 @@ export const RegistrarTransaccion = async (
 }
 export const RevertirTransaccion = async (
   monto: number,
-  numero_cuenta: number,
+  numero_cuenta: number | string,
   descripcion: string
 ) => {
   const datosParaApiInfinita = {
@@ -42,7 +42,7 @@ export const RevertirTransaccion = async (
       TcPlanId: 1,
       TcComId: 1,
       TcMovCuC: 1,
-      MvCod: 1
+      MvCod: 81
     }
   }
   const res = await axios.post(`${env.get('INFINITA_URL_API')}/RegistroTrn`, datosParaApiInfinita, {

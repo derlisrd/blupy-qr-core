@@ -5,6 +5,7 @@ import GeneradoAuditoria from '#models/generados_auditoria'
 import { generarQRValidator } from '#validators/generar'
 import { errors } from '@vinejs/vine'
 import type { HttpContext } from '@adonisjs/core/http'
+import { RevertirTransaccion } from '#services/infinita_service'
 
 export default class GeneradosComerciosController {
 
@@ -120,15 +121,6 @@ export default class GeneradosComerciosController {
       if (generado == null) {
         return response.status(404).json({ success: false, message: 'No autorizado' })
       }
-      /* const cincoMinutos = 5 * 60 * 1000
-      const tiempoActual = new Date().getTime()
-      const tiempoCreacion = new Date(`${generado.createdAt}`).getTime()
-
-      if (tiempoActual - tiempoCreacion > cincoMinutos) {
-        return response
-          .status(403)
-          .json({ success: false, message: 'QR vencido. Debe generar otro' })
-      } */
 
       if (generado.status === 0) {
         return response.status(403).json({ success: false, message: 'QR aun no autorizado' })
@@ -198,6 +190,19 @@ export default class GeneradosComerciosController {
         return response
           .status(403)
           .json({ success: false, message: 'Operacion ya ha sido revertida' })
+      }
+
+      if (generado.numero_cuenta !== '0') {
+        const res = await RevertirTransaccion(
+          generado.monto,
+          generado.numero_cuenta,
+          'Reversion de mov. ' + generado.numero_movimiento
+        )
+        if (res.data.Retorno === 'ERROR' || res.status !== 200) {
+          return response
+            .status(400)
+            .json({ success: false, message: 'Ocurrio un error al revertir' })
+        }
       }
 
       generado.status = 3
