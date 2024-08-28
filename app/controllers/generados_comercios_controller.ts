@@ -1,3 +1,4 @@
+import QRCode from 'qrcode'
 import Comercio from '#models/comercio'
 import Generado from '#models/generado'
 import Moneda from '#models/moneda'
@@ -57,7 +58,7 @@ export default class GeneradosComerciosController {
 
       await generado.load('moneda')
       await generado.load('comercio')
-
+      const base64 = await QRCode.toDataURL(String(generado.id))
       return response.json({
         success: true,
         results: {
@@ -75,7 +76,8 @@ export default class GeneradosComerciosController {
           sucursal: generado.comercio.sucursal,
           numero_comprobante: generado.numero_comprobante,
           numero_movimiento: generado.numero_movimiento,
-          fecha: generado.createdAt
+          fecha: generado.createdAt,
+          base64
         }
       })
     } catch (error) {
