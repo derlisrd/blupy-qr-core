@@ -1,3 +1,4 @@
+import QRCode from 'qrcode'
 import Comercio from '#models/comercio'
 import Generado from '#models/generado'
 import Moneda from '#models/moneda'
@@ -5,6 +6,7 @@ import GeneradoAuditoria from '#models/generados_auditoria'
 import { generarQRValidator } from '#validators/generar'
 import { errors } from '@vinejs/vine'
 import type { HttpContext } from '@adonisjs/core/http'
+import { RevertirTransaccion } from '#services/infinita_service'
 
 export default class GeneradosComerciosController {
 
@@ -56,15 +58,17 @@ export default class GeneradosComerciosController {
 
       await generado.load('moneda')
       await generado.load('comercio')
-
+      const base64 = await QRCode.toDataURL(String(generado.id))
       return response.json({
         success: true,
         results: {
           id: generado.id,
+          imageUrl: 'https://quickchart.io/qr?text=' + generado.id,
           documento: generado.documento,
           monto: generado.monto,
           descripcion: generado.descripcion,
           detalle: generado.detalle,
+          condicionVenta: generado.condicion_venta,
           condicion_venta: generado.condicion_venta,
           condicion: generado.condicion_venta === 1 ? 'Contado' : 'Credito',
           moneda: generado.moneda.abreviatura,
@@ -72,7 +76,8 @@ export default class GeneradosComerciosController {
           sucursal: generado.comercio.sucursal,
           numero_comprobante: generado.numero_comprobante,
           numero_movimiento: generado.numero_movimiento,
-          fecha: generado.createdAt
+          fecha: generado.createdAt,
+          base64
         }
       })
     } catch (error) {
@@ -118,15 +123,6 @@ export default class GeneradosComerciosController {
       if (generado == null) {
         return response.status(404).json({ success: false, message: 'No autorizado' })
       }
-      /* const cincoMinutos = 5 * 60 * 1000
-      const tiempoActual = new Date().getTime()
-      const tiempoCreacion = new Date(`${generado.createdAt}`).getTime()
-
-      if (tiempoActual - tiempoCreacion > cincoMinutos) {
-        return response
-          .status(403)
-          .json({ success: false, message: 'QR vencido. Debe generar otro' })
-      } */
 
       if (generado.status === 0) {
         return response.status(403).json({ success: false, message: 'QR aun no autorizado' })
@@ -183,6 +179,7 @@ export default class GeneradosComerciosController {
     try {
       const { id } = request.only(['id'])
       const generado = await Generado.find(id)
+      const auditoria = await GeneradoAuditoria.findByOrFail('generado_id',id)
       if (generado == null) {
         return response.status(404).json({ success: false, message: 'No autorizado' })
       }
@@ -191,13 +188,28 @@ export default class GeneradosComerciosController {
         return response.status(403).json({ success: false, message: 'QR aun no autorizado' })
       }
 
-      if (generado.status > 1) {
+      if (generado.status > 2) {
         return response
           .status(403)
           .json({ success: false, message: 'Operacion ya ha sido revertida' })
       }
 
-      generado.status = 2
+      if (generado.numero_cuenta !== '0') {
+        const res = await RevertirTransaccion(
+          generado.monto,
+          generado.numero_cuenta,
+          'Reversion de mov. ' + generado.numero_movimiento
+        )
+        if (res.data.Retorno === 'ERROR' || res.status !== 200) {
+          return response
+            .status(400)
+            .json({ success: false, message: 'Ocurrio un error al revertir' })
+        }
+      }
+
+      generado.status = 3
+      auditoria.status = 'REVERTIDO'
+      await auditoria.save()
       await generado.save()
 
       const results = { id }
