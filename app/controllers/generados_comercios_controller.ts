@@ -65,6 +65,7 @@ export default class GeneradosComerciosController {
         success: true,
         results: {
           id: generado.id,
+          codigo: generado.codigo,
           imageUrl: 'https://quickchart.io/qr?text=' + generado.id,
           documento: generado.documento,
           monto: generado.monto,
