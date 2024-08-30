@@ -24,8 +24,7 @@ export default class GeneradosComerciosController {
         'adicional',
         'moneda_id',
         'numero_movimiento',
-        'numero_comprobante',
-        'codigo'
+        'numero_comprobante'
       ])
       const idMoneda = req.moneda_id ?? 1
       const monedaFind = await Moneda.find(idMoneda)
@@ -38,6 +37,7 @@ export default class GeneradosComerciosController {
       if (comercioFind == null) {
         return response.status(404).json({ success: false, message: 'ID de comercio no valido' })
       }
+      const codigo = ''
 
       const generado = await Generado.create({
         monto: req.monto,
@@ -50,7 +50,7 @@ export default class GeneradosComerciosController {
         moneda_id: idMoneda,
         numero_movimiento: req.numero_movimiento,
         numero_comprobante: req.numero_comprobante,
-        codigo: req.codigo
+        codigo
       })
 
       await GeneradoAuditoria.create({

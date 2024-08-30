@@ -1,5 +1,5 @@
 import { DateTime } from 'luxon'
-import { BaseModel, /* beforeCreate, */ belongsTo, column } from '@adonisjs/lucid/orm'
+import { BaseModel, beforeCreate, belongsTo, column } from '@adonisjs/lucid/orm'
 // import { randomUUID } from 'node:crypto'
 import Comercio from './comercio.js'
 import type { BelongsTo } from '@adonisjs/lucid/types/relations'
@@ -13,6 +13,13 @@ export default class Generado extends BaseModel {
   static async setID(generado: Generado) {
     generado.id = randomUUID()
   } */
+
+  @beforeCreate()
+  static async setID(generado: Generado) {
+    const timestamp = Date.now().toString()
+    const randomNumber = Math.floor(Math.random() * 1000).toString().padStart(3, '0')
+    generado.codigo = `${timestamp}${randomNumber}`
+  }
 
   @column({ isPrimary: true })
   declare id: number
