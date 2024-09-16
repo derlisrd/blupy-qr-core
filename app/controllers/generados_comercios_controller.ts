@@ -31,12 +31,12 @@ export default class GeneradosComerciosController {
       if (monedaFind == null) {
         return response.status(404).json({ success: false, message: 'No existe id de moneda' })
       }
-
       const comercioFind = await Comercio.find(req.comercio_id)
 
       if (comercioFind == null) {
         return response.status(404).json({ success: false, message: 'ID de comercio no valido' })
       }
+      const codigo = ''
 
       const generado = await Generado.create({
         monto: req.monto,
@@ -48,7 +48,8 @@ export default class GeneradosComerciosController {
         adicional: req.adicional,
         moneda_id: idMoneda,
         numero_movimiento: req.numero_movimiento,
-        numero_comprobante: req.numero_comprobante
+        numero_comprobante: req.numero_comprobante,
+        codigo
       })
 
       await GeneradoAuditoria.create({
@@ -63,6 +64,7 @@ export default class GeneradosComerciosController {
         success: true,
         results: {
           id: generado.id,
+          codigo: generado.codigo,
           imageUrl: 'https://quickchart.io/qr?text=' + generado.id,
           documento: generado.documento,
           monto: generado.monto,
@@ -131,6 +133,7 @@ export default class GeneradosComerciosController {
 
       const results = {
         id: generado.id,
+        codigo: generado.codigo,
         numero_cuenta: generado.numero_cuenta,
         MTNume: 1,
         monto: generado.monto,

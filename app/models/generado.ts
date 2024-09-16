@@ -1,5 +1,5 @@
 import { DateTime } from 'luxon'
-import { BaseModel, /* beforeCreate, */ belongsTo, column } from '@adonisjs/lucid/orm'
+import { BaseModel, beforeCreate, belongsTo, column } from '@adonisjs/lucid/orm'
 // import { randomUUID } from 'node:crypto'
 import Comercio from './comercio.js'
 import type { BelongsTo } from '@adonisjs/lucid/types/relations'
@@ -14,11 +14,19 @@ export default class Generado extends BaseModel {
     generado.id = randomUUID()
   } */
 
+  @beforeCreate()
+  static async setID(generado: Generado) {
+    generado.codigo = await Generado.generateUniqueCode()
+  }
+
   @column({ isPrimary: true })
   declare id: number
 
   @column()
   declare monto: number
+
+  @column()
+  declare codigo: string
 
   @column()
   declare documento: string
@@ -71,4 +79,23 @@ export default class Generado extends BaseModel {
 
   @column.dateTime({ autoCreate: true, autoUpdate: true })
   declare updatedAt: DateTime
+
+  static async generateUniqueCode(): Promise<string> {
+    let isUnique = false
+    let codigo = ''
+
+    while (!isUnique) {
+      // Genera un número aleatorio entre 1 y 10 dígitos
+      const length = Math.floor(Math.random() * 10) + 1
+      codigo = Math.floor(Math.random() * Math.pow(10, length)).toString()
+
+      // Verifica si el código ya existe en la base de datos
+      const existing = await Generado.findBy('codigo', codigo)
+      if (existing == null) {
+        isUnique = true
+      }
+    }
+
+    return codigo
+  }
 }

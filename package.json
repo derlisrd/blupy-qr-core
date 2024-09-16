@@ -45,6 +45,7 @@
     "@types/luxon": "^3.4.2",
     "@types/node": "^20.11.10",
     "@types/qrcode": "1.5.5",
+    "@types/winston": "^2.4.4",
     "@typescript-eslint/eslint-plugin": "^6.21.0",
     "eslint": "^8.57.0",
     "eslint-config-standard-with-typescript": "^43.0.1",
@@ -67,7 +68,8 @@
     "luxon": "3.4.4",
     "mysql2": "3.10.2",
     "qrcode": "1.5.4",
-    "reflect-metadata": "0.2.2"
+    "reflect-metadata": "0.2.2",
+    "winston": "^3.14.2"
   },
   "eslintConfig": {
     "extends": "@adonisjs/eslint-config/app"
