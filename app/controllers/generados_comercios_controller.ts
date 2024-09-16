@@ -7,6 +7,7 @@ import { generarQRValidator } from '#validators/generar'
 import { errors } from '@vinejs/vine'
 import type { HttpContext } from '@adonisjs/core/http'
 import { RevertirTransaccion } from '#services/infinita_service'
+import logger from '#services/logger'
 
 export default class GeneradosComerciosController {
 
@@ -26,6 +27,7 @@ export default class GeneradosComerciosController {
         'numero_movimiento',
         'numero_comprobante'
       ])
+      logger.error(data)
       const idMoneda = req.moneda_id ?? 1
       const monedaFind = await Moneda.find(idMoneda)
       if (monedaFind == null) {

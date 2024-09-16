@@ -4,6 +4,7 @@ import env from '#start/env'
 import { userLoginValidator } from '#validators/user'
 import type { HttpContext } from '@adonisjs/core/http'
 import jwt from 'jsonwebtoken'
+import logger from '#services/logger'
 // import hash from '@adonisjs/core/services/hash'
 
 export default class AuthController {
@@ -15,7 +16,7 @@ export default class AuthController {
       // user.serialize()
       // const token = await User.accessTokens.create(user)
       const token = jwt.sign({ id: user.id, email: user.email }, env.get('JWT_SECRET', ''), {
-        expiresIn: 400
+        expiresIn: 600
       })
       return response.json({
         success: true,
@@ -25,6 +26,7 @@ export default class AuthController {
       })
       // return response.json({ success: true, results: token })
     } catch (error) {
+      logger.error(error)
       const authError = new AuthException()
       return response
         .status(error.status)
