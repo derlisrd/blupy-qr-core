@@ -27,7 +27,7 @@ export default class GeneradosComerciosController {
         'numero_movimiento',
         'numero_comprobante'
       ])
-      logger.info(JSON.stringify(data))
+
       const idMoneda = req.moneda_id ?? 1
       const monedaFind = await Moneda.find(idMoneda)
       if (monedaFind == null) {
@@ -85,7 +85,7 @@ export default class GeneradosComerciosController {
         }
       })
     } catch (error) {
-      console.log(error)
+      logger.info(String(error))
       let message = 'Error de servidor'
       if (error instanceof errors.E_VALIDATION_ERROR) {
         // array created by SimpleErrorReporter
