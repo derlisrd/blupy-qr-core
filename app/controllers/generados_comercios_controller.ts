@@ -7,6 +7,7 @@ import { generarQRValidator } from '#validators/generar'
 import { errors } from '@vinejs/vine'
 import type { HttpContext } from '@adonisjs/core/http'
 import { RevertirTransaccion } from '#services/infinita_service'
+import logger from '#services/logger'
 
 export default class GeneradosComerciosController {
 
@@ -26,6 +27,7 @@ export default class GeneradosComerciosController {
         'numero_movimiento',
         'numero_comprobante'
       ])
+
       const idMoneda = req.moneda_id ?? 1
       const monedaFind = await Moneda.find(idMoneda)
       if (monedaFind == null) {
@@ -83,7 +85,7 @@ export default class GeneradosComerciosController {
         }
       })
     } catch (error) {
-      console.log(error)
+      logger.info(String(error))
       let message = 'Error de servidor'
       if (error instanceof errors.E_VALIDATION_ERROR) {
         // array created by SimpleErrorReporter
