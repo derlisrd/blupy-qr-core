@@ -31,7 +31,6 @@ export default class GeneradosComerciosController {
       if (monedaFind == null) {
         return response.status(404).json({ success: false, message: 'No existe id de moneda' })
       }
-
       const comercioFind = await Comercio.find(req.comercio_id)
 
       if (comercioFind == null) {

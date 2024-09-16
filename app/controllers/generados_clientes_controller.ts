@@ -1,7 +1,7 @@
 import Generado from '#models/generado'
 import GeneradoAuditoria from '#models/generados_auditoria'
 import { ListarTarjetasPorDoc, RegistrarTransaccion } from '#services/infinita_service'
-import { LOG } from '#services/supabase_service'
+import logger from '#services/logger'
 
 import { autorizarQRValidator } from '#validators/generar'
 import type { HttpContext } from '@adonisjs/core/http'
@@ -58,6 +58,7 @@ export default class GeneradosClientesController {
           req.numero_cuenta,
           generado.descripcion
         )
+        logger.error(res)
         if (res.data.Retorno === 'ERROR' || res.status !== 200) {
           return response
             .status(400)
@@ -94,7 +95,7 @@ export default class GeneradosClientesController {
       return response.json({ success: true, message: 'Autorizado', results })
     } catch (error) {
       console.log(error)
-      await LOG('Erro_QR_autorizar',error)
+      logger.error(error)
       // const message = error.messages[0].message ?? 'Error de servidor'
       return response.status(500).json({ success: false, message: 'Error de servidor' })
     }
