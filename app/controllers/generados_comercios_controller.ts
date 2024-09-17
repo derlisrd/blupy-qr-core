@@ -149,6 +149,9 @@ export default class GeneradosComerciosController {
       }
       return response.json({ success: true, message: 'Autorizado', results })
     } catch (error) {
+      console.log(error)
+      logger.info(String(error))
+      logger.info(JSON.stringify(error))
       return response
         .status(500)
         .json({ success: false, error: 'Error de servidor contactar con administrador' })
