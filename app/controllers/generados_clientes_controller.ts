@@ -101,6 +101,7 @@ export default class GeneradosClientesController {
       console.log(error)
       logger.error(error)
       logger.error(String(error))
+      logger.error(JSON.stringify(error))
       // const message = error.messages[0].message ?? 'Error de servidor'
       return response.status(500).json({ success: false, message: 'Error de servidor' })
     }
