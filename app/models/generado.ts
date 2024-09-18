@@ -29,6 +29,9 @@ export default class Generado extends BaseModel {
   declare codigo: string
 
   @column()
+  declare web: boolean
+
+  @column()
   declare documento: string
 
   @column()
