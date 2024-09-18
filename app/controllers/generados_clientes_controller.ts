@@ -70,6 +70,7 @@ export default class GeneradosClientesController {
       generado.status = 1
       generado.numero_movimiento = TcMovNro
       generado.numero_cuenta = req.numero_cuenta
+      generado.adicional = req.adicional
       await generado.save()
 
       auditoria.telefono = req.telefono
