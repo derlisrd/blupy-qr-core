@@ -11,6 +11,22 @@ import logger from '#services/logger'
 
 export default class GeneradosComerciosController {
 
+  async consultarAutorizacionPorCodigo({ request, response }: HttpContext) {
+    const codigo = request.param('codigo')
+    const generado = await Generado.findBy({ codigo })
+    if (generado == null) {
+      return response.status(404).json({ success: false, message: 'No autorizado' })
+    }
+
+    if (generado.status === 0) {
+      return response.status(403).json({ success: false, message: 'QR aun no autorizado' })
+    }
+    return response.json({
+      success: true,
+      results: generado
+    })
+  }
+
   async generarQR({ request, response }: HttpContext) {
     try {
       const data = request.all()
