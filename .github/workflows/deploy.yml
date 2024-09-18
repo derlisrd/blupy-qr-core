@@ -25,6 +25,7 @@ jobs:
         script: |
           cd /var/www/html/qr-core-desa/
           git pull origin dev
+          node ace migration:run
           npm ci
           npm run build
           cp .env build

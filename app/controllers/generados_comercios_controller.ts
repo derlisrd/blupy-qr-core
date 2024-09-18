@@ -25,7 +25,8 @@ export default class GeneradosComerciosController {
         'adicional',
         'moneda_id',
         'numero_movimiento',
-        'numero_comprobante'
+        'numero_comprobante',
+        'web'
       ])
 
       const idMoneda = req.moneda_id ?? 1
@@ -42,6 +43,7 @@ export default class GeneradosComerciosController {
 
       const generado = await Generado.create({
         monto: req.monto,
+        web: req.web,
         documento: req.documento,
         descripcion: req.descripcion,
         comercio_id: req.comercio_id,
@@ -67,6 +69,7 @@ export default class GeneradosComerciosController {
         results: {
           id: generado.id,
           codigo: generado.codigo,
+          web: generado.web,
           imageUrl: 'https://quickchart.io/qr?text=' + generado.id,
           documento: generado.documento,
           monto: generado.monto,
@@ -149,6 +152,9 @@ export default class GeneradosComerciosController {
       }
       return response.json({ success: true, message: 'Autorizado', results })
     } catch (error) {
+      console.log(error)
+      logger.info(String(error))
+      logger.info(JSON.stringify(error))
       return response
         .status(500)
         .json({ success: false, error: 'Error de servidor contactar con administrador' })

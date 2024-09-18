@@ -56,7 +56,7 @@ export default class GeneradosClientesController {
 
       let TcMovNro = ''
       // esto realizar si es externo
-      if (req.numero_cuenta > 0) {
+      if (parseInt(req.numero_cuenta) > 0) {
         const res = await RegistrarTransaccion(
           generado.monto,
           req.numero_cuenta,
@@ -99,8 +99,8 @@ export default class GeneradosClientesController {
       return response.json({ success: true, message: 'Autorizado', results })
     } catch (error) {
       console.log(error)
-      logger.info(String(error))
-      logger.info(JSON.stringify(error))
+      logger.error(error)
+      logger.error(String(error))
       // const message = error.messages[0].message ?? 'Error de servidor'
       return response.status(500).json({ success: false, message: 'Error de servidor' })
     }
