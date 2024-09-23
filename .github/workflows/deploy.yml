@@ -25,10 +25,8 @@ jobs:
         script: |
           cd /var/www/html/qr-core-desa/
           git pull origin dev
+          npm ci --omit="dev"
           node ace migration:run
-          npm ci
           npm run build
           cp .env build
-          cd build
-          npm ci --omit="dev"
           pm2 restart blupy-qr
