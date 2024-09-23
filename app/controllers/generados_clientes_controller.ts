@@ -90,7 +90,8 @@ export default class GeneradosClientesController {
         fecha: generado.createdAt,
         comercio: generado.comercio.nombre,
         numero_movimiento: TcMovNro,
-        numero_cuenta: req.numero_cuenta
+        numero_cuenta: req.numero_cuenta,
+        info: generado.descripcion + ' ' + generado.detalle
       }
       // console.log('result', results)
       return response.json({ success: true, message: 'Autorizado', results })
