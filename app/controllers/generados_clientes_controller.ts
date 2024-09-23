@@ -96,8 +96,6 @@ export default class GeneradosClientesController {
       return response.json({ success: true, message: 'Autorizado', results })
     } catch (error) {
       console.log(error)
-      logger.error(error)
-      logger.error(String(error))
       logger.error(JSON.stringify(error))
       console.log(JSON.stringify(error))
       // const message = error.messages[0].message ?? 'Error de servidor'
