@@ -90,8 +90,7 @@ export default class GeneradosClientesController {
         fecha: generado.createdAt,
         comercio: generado.comercio.nombre,
         numero_movimiento: TcMovNro,
-        numero_cuenta: req.numero_cuenta,
-        info: generado.descripcion + ' ' + generado.monto
+        numero_cuenta: req.numero_cuenta
       }
       // console.log('result', results)
       return response.json({ success: true, message: 'Autorizado', results })
@@ -100,6 +99,7 @@ export default class GeneradosClientesController {
       logger.error(error)
       logger.error(String(error))
       logger.error(JSON.stringify(error))
+      console.log(JSON.stringify(error))
       // const message = error.messages[0].message ?? 'Error de servidor'
       return response.status(500).json({ success: false, message: 'Error de servidor' })
     }
