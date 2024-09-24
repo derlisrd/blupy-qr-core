@@ -10,7 +10,6 @@ export default class GeneradosClientesController {
   async autorizarQR({ request, response }: HttpContext) {
     try {
       const req = request.all()
-
       await autorizarQRValidator.validate(req)
 
       const generado = await Generado.find(req.id)
@@ -52,7 +51,7 @@ export default class GeneradosClientesController {
 
       let TcMovNro = ''
       // esto realizar si es externo
-      if (parseInt(req.numero_cuenta) > 0) {
+      if (generado.condicion_venta === 1) {
         const res = await RegistrarTransaccion(
           generado.monto,
           req.numero_cuenta,
@@ -71,6 +70,7 @@ export default class GeneradosClientesController {
       generado.numero_movimiento = TcMovNro
       generado.numero_cuenta = req.numero_cuenta
       generado.adicional = req.adicional
+      generado.mtnume = req.mtnume
       await generado.save()
 
       auditoria.telefono = req.telefono
@@ -96,9 +96,8 @@ export default class GeneradosClientesController {
       // console.log('result', results)
       return response.json({ success: true, message: 'Autorizado', results })
     } catch (error) {
-      console.log(error)
+
       logger.error(JSON.stringify(error))
-      console.log(JSON.stringify(error))
       // const message = error.messages[0].message ?? 'Error de servidor'
       return response.status(500).json({ success: false, message: 'Error de servidor' })
     }

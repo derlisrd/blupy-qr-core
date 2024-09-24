@@ -38,6 +38,9 @@ export default class Generado extends BaseModel {
   declare numero_cuenta: string
 
   @column()
+  declare mtnume: string
+
+  @column()
   declare descripcion: string
 
   @column()
