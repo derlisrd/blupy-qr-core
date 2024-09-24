@@ -57,7 +57,7 @@ export default class GeneradosClientesController {
           req.numero_cuenta,
           generado.descripcion
         )
-        logger.info(JSON.stringify(res))
+        // logger.info(JSON.stringify(res))
         if (res.data.Retorno === 'ERROR' || res.status !== 200) {
           return response
             .status(400)
