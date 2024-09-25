@@ -5,13 +5,13 @@ export default class extends BaseSchema {
 
   async up() {
     this.schema.alterTable(this.tableName, (table) => {
-      table.string('mtnume').defaultTo('1').nullable().after('numero_cuenta')
+      table.string('numero_tarjeta').defaultTo('1').nullable().after('numero_cuenta')
     })
   }
 
   async down() {
     this.schema.alterTable(this.tableName,(table) => {
-      table.dropColumn('mtnume')
+      table.dropColumn('numero_tarjeta')
     })
   }
 }
