@@ -10,7 +10,6 @@ export default class GeneradosClientesController {
   async autorizarQR({ request, response }: HttpContext) {
     try {
       const req = request.all()
-
       await autorizarQRValidator.validate(req)
 
       const generado = await Generado.find(req.id)
@@ -56,13 +55,13 @@ export default class GeneradosClientesController {
 
       let TcMovNro = ''
       // esto realizar si es externo
-      if (parseInt(req.numero_cuenta) > 0) {
+      if (generado.condicion_venta === 1) {
         const res = await RegistrarTransaccion(
           generado.monto,
           req.numero_cuenta,
           generado.descripcion
         )
-        logger.error(res)
+        // logger.info(JSON.stringify(res))
         if (res.data.Retorno === 'ERROR' || res.status !== 200) {
           return response
             .status(400)
@@ -75,6 +74,7 @@ export default class GeneradosClientesController {
       generado.numero_movimiento = TcMovNro
       generado.numero_cuenta = req.numero_cuenta
       generado.adicional = req.adicional
+      generado.numero_tarjeta = req.numero_tarjeta ?? 1
       await generado.save()
 
       auditoria.telefono = req.telefono
@@ -88,23 +88,23 @@ export default class GeneradosClientesController {
 
       const results = {
         monto: generado.monto,
+        documento: generado.documento,
         descripcion: generado.descripcion,
         moneda: generado.moneda.abreviatura,
         id: generado.id,
         fecha: generado.createdAt,
         comercio: generado.comercio.nombre,
         numero_movimiento: TcMovNro,
-        numero_cuenta: req.numero_cuenta
+        numero_cuenta: req.numero_cuenta,
+        info: generado.descripcion + ' ' + generado.detalle
       }
       // console.log('result', results)
       return response.json({ success: true, message: 'Autorizado', results })
     } catch (error) {
       console.log(error)
-      logger.error(error)
-      logger.error(String(error))
       logger.error(JSON.stringify(error))
       // const message = error.messages[0].message ?? 'Error de servidor'
-      return response.status(500).json({ success: false, message: 'Error de servidor' })
+      return response.status(500).json({ success: false, message: 'Error de servidor. BQ501' })
     }
   }
 
