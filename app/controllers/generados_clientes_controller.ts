@@ -84,6 +84,7 @@ export default class GeneradosClientesController {
 
       const results = {
         monto: generado.monto,
+        documento: generado.documento,
         descripcion: generado.descripcion,
         moneda: generado.moneda.abreviatura,
         id: generado.id,
