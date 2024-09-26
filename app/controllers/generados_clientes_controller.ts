@@ -68,7 +68,7 @@ export default class GeneradosClientesController {
 
       generado.status = 1
       generado.numero_movimiento = TcMovNro
-      generado.numero_cuenta = req.numero_cuenta
+      generado.numero_cuenta = req.numero_cuenta ?? 0
       generado.adicional = req.adicional
       generado.numero_tarjeta = req.numero_tarjeta ?? 1
       await generado.save()
