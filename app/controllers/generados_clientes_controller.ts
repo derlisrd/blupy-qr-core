@@ -63,9 +63,10 @@ export default class GeneradosClientesController {
         )
         // logger.info(JSON.stringify(res))
         if (res.data.Retorno === 'ERROR' || res.status !== 200) {
+          logger.info((generado))
           return response
             .status(400)
-            .json({ success: false, message: 'Ocurrio un error al autorizar' })
+            .json({ success: false, message: 'Ocurrio un error al autorizar credito digital. QC601' })
         }
         TcMovNro = res.data.TcMovNro
       }
@@ -102,7 +103,6 @@ export default class GeneradosClientesController {
       return response.json({ success: true, message: 'Autorizado', results })
     } catch (error) {
       console.log(error)
-      logger.error(JSON.stringify(error))
       // const message = error.messages[0].message ?? 'Error de servidor'
       return response.status(500).json({ success: false, message: 'Error de servidor. BQ501' })
     }
