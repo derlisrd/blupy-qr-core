@@ -61,7 +61,7 @@ export default class GeneradosClientesController {
         if (res.data.Retorno === 'ERROR' || res.status !== 200) {
           return response
             .status(400)
-            .json({ success: false, message: 'Ocurrio un error al autorizar' })
+            .json({ success: false, message: 'Ocurrio un error al autorizar credito digital. QC601' })
         }
         TcMovNro = res.data.TcMovNro
       }
