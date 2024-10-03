@@ -79,7 +79,7 @@ export default class GeneradosComerciosController {
 
       await generado.load('moneda')
       await generado.load('comercio')
-      const base64 = await QRCode.toDataURL(String(generado.id))
+      const base64 = await QRCode.toDataURL(String(generado.id),{ width: 256, margin: 2 })
       return response.json({
         success: true,
         results: {
