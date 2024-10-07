@@ -58,7 +58,7 @@ export default class GeneradosClientesController {
         )
         // logger.info(JSON.stringify(res))
         if (res.data.Retorno === 'ERROR' || res.status !== 200) {
-          const message = JSON.stringify(res.data)
+          const message = res.data?.Messages[0]?.Descripcion
           return response
             .status(400)
             .json({ success: false, message: message + ' Error. QC601' })
