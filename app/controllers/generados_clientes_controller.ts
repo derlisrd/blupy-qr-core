@@ -59,7 +59,7 @@ export default class GeneradosClientesController {
         )
         // logger.info(JSON.stringify(res))
         if (res.data.Retorno === 'ERROR' || res.status !== 200) {
-          logger.info((generado))
+          logger.info(JSON.stringify(generado))
           return response
             .status(400)
             .json({ success: false, message: 'Ocurrio un error al autorizar credito digital. QC601' })
