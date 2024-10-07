@@ -155,6 +155,7 @@ export default class GeneradosComerciosController {
       const results = {
         id: generado.id,
         codigo: generado.codigo,
+        documento: generado.documento,
         numero_cuenta: generado.numero_cuenta,
         MTNume: generado.numero_tarjeta,
         numero_tarjeta: generado.numero_tarjeta,
