@@ -1,7 +1,6 @@
 import Generado from '#models/generado'
 import GeneradoAuditoria from '#models/generados_auditoria'
 import { ListarTarjetasPorDoc, RegistrarTransaccion } from '#services/infinita_service'
-import logger from '#services/logger'
 
 import { autorizarQRValidator } from '#validators/generar'
 import type { HttpContext } from '@adonisjs/core/http'
@@ -59,10 +58,10 @@ export default class GeneradosClientesController {
         )
         // logger.info(JSON.stringify(res))
         if (res.data.Retorno === 'ERROR' || res.status !== 200) {
-          logger.info(JSON.stringify(generado))
+          const message = res.data?.Messages[0]?.Descripcion
           return response
             .status(400)
-            .json({ success: false, message: 'Ocurrio un error al autorizar credito digital. QC601' })
+            .json({ success: false, message: message + ' Error. QC601' })
         }
         TcMovNro = res.data.TcMovNro
       }
