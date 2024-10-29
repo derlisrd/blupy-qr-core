@@ -54,7 +54,8 @@ export default class GeneradosClientesController {
         const res = await RegistrarTransaccion(
           generado.monto,
           req.numero_cuenta,
-          generado.descripcion
+          generado.descripcion,
+          req.numero_tarjeta
         )
         // logger.info(JSON.stringify(res))
         if (res.data.Retorno === 'ERROR' || res.status !== 200) {
