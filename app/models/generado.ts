@@ -29,7 +29,7 @@ export default class Generado extends BaseModel {
   declare codigo: string
 
   @column()
-  declare appel_codigo: string
+  declare appel_codigo: number
 
   @column()
   declare web: boolean

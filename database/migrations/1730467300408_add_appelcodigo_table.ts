@@ -5,7 +5,7 @@ export default class extends BaseSchema {
 
   async up() {
     this.schema.alterTable(this.tableName, (table) => {
-      table.string('appel_codigo').nullable().after('codigo')
+      table.bigInteger('appel_codigo').nullable().after('codigo')
     })
   }
 
