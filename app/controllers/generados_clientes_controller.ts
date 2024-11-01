@@ -2,7 +2,6 @@ import Generado from '#models/generado'
 import GeneradoAuditoria from '#models/generados_auditoria'
 // import { ConfirmarPago } from '#services/farma_service'
 import { ListarTarjetasPorDoc, RegistrarTransaccion } from '#services/infinita_service'
-import { SupabaseLOG } from '#services/supabase_service'
 
 import { autorizarQRValidator } from '#validators/generar'
 import type { HttpContext } from '@adonisjs/core/http'
@@ -14,7 +13,6 @@ export default class GeneradosClientesController {
       await autorizarQRValidator.validate(req)
 
       const generado = await Generado.find(req.id)
-      await SupabaseLOG('cuenta ' + generado?.numero_cuenta ,'generado' + generado?.documento + ' req' + req.documento)
       if (generado?.documento !== req.documento && (generado?.numero_cuenta === null || generado?.numero_cuenta === '0')) {
         return response.status(401).json({ success: false, message: 'Tu cuenta no coincide con la cédula del QR generado.' })
       }
