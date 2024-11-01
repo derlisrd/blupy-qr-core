@@ -1,7 +1,7 @@
 import axios from 'axios'
 import env from '#start/env'
 
-export async function LOG(origen: string, detalles: any): Promise<boolean> {
+export async function SupabaseLOG(origen: string, detalles: string): Promise<boolean> {
   try {
     await axios.post(
       `${env.get('SUPABASE_URL')}/rest/v1/logs`,
@@ -19,6 +19,7 @@ export async function LOG(origen: string, detalles: any): Promise<boolean> {
     )
     return true
   } catch (error) {
+    console.log(error)
     return false
   }
 }

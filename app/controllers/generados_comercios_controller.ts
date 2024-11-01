@@ -34,6 +34,7 @@ export default class GeneradosComerciosController {
       const req = request.only([
         'monto',
         'descripcion',
+        'appel_codigo',
         'documento',
         'detalle',
         'condicion_venta',
@@ -44,7 +45,6 @@ export default class GeneradosComerciosController {
         'numero_comprobante',
         'web'
       ])
-
       const idMoneda = req.moneda_id ?? 1
       const monedaFind = await Moneda.find(idMoneda)
       if (monedaFind == null) {
@@ -61,6 +61,7 @@ export default class GeneradosComerciosController {
         monto: req.monto,
         web: req.web,
         documento: req.documento,
+        appel_codigo: req.appel_codigo,
         descripcion: req.descripcion,
         comercio_id: req.comercio_id,
         condicion_venta: req.condicion_venta,
@@ -85,6 +86,7 @@ export default class GeneradosComerciosController {
         results: {
           id: generado.id,
           codigo: generado.codigo,
+          appel_codigo: generado.appel_codigo,
           web: generado.web,
           imageUrl: 'https://quickchart.io/qr?text=' + generado.id,
           documento: generado.documento,
@@ -166,7 +168,8 @@ export default class GeneradosComerciosController {
         descripcion: generado.descripcion,
         condicion_venta: generado.condicion_venta,
         fecha: generado.createdAt,
-        adicional: generado.adicional
+        adicional: generado.adicional,
+        appel_codigo: generado.appel_codigo
       }
       return response.json({ success: true, message: 'Autorizado', results })
     } catch (error) {

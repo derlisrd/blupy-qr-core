@@ -29,6 +29,9 @@ export default class Generado extends BaseModel {
   declare codigo: string
 
   @column()
+  declare appel_codigo: number
+
+  @column()
   declare web: boolean
 
   @column()

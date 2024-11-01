@@ -6,12 +6,13 @@ import axios from 'axios'
 export const RegistrarTransaccion = async (
   monto: number,
   numero_cuenta: number,
-  descripcion: string
+  descripcion: string,
+  numero_tarjeta: number
 ) => {
   const datosParaApiInfinita = {
     Transaccion: {
       MaeCtaId: String(numero_cuenta),
-      MTNume: 1,
+      MTNume: numero_tarjeta,
       TcMovImp: monto,
       TcMovDes: descripcion,
       TcPlanId: 1,
