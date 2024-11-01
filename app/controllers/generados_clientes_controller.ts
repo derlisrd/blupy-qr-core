@@ -64,7 +64,7 @@ export default class GeneradosClientesController {
           const message = (res.data.Messages[0].Description)
           return response
             .status(400)
-            .json({ success: false, message: message + ' Error. QC601' })
+            .json({ success: false, message: message + '. QC601. Comunicate con nosotros.' })
         }
         TcMovNro = res.data.TcMovNro
       }
