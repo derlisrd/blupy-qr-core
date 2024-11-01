@@ -15,7 +15,7 @@ export default class GeneradosClientesController {
 
       const generado = await Generado.find(req.id)
       await SupabaseLOG('cuenta ' + generado?.numero_cuenta ,'generado' + generado?.documento + ' req' + req.documento)
-      if (generado?.documento !== req.documento && generado?.numero_cuenta === '0') {
+      if (generado?.documento !== req.documento && (generado?.numero_cuenta === null || generado?.numero_cuenta === '0')) {
         return response.status(401).json({ success: false, message: 'Tu cuenta no coincide con la cédula del QR generado.' })
       }
       const auditoria = await GeneradoAuditoria.findByOrFail('generado_id',req.id)
