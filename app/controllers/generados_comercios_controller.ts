@@ -153,7 +153,8 @@ export default class GeneradosComerciosController {
         descripcion: generado.descripcion,
         condicion_venta: generado.condicion_venta,
         fecha: generado.createdAt,
-        adicional: generado.adicional
+        adicional: generado.adicional,
+        appel_codigo: generado.appel_codigo
       }
       return response.json({ success: true, message: 'Autorizado', results })
     } catch (error) {
