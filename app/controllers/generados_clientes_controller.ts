@@ -1,5 +1,6 @@
 import Generado from '#models/generado'
 import GeneradoAuditoria from '#models/generados_auditoria'
+// import { ConfirmarPago } from '#services/farma_service'
 import { ListarTarjetasPorDoc, RegistrarTransaccion } from '#services/infinita_service'
 
 import { autorizarQRValidator } from '#validators/generar'
@@ -12,7 +13,8 @@ export default class GeneradosClientesController {
       await autorizarQRValidator.validate(req)
 
       const generado = await Generado.find(req.id)
-
+      console.log(generado)
+      console.log(req.documento)
       if (generado?.documento !== req.documento && generado?.numero_cuenta === '0') {
         return response.status(401).json({ success: false, message: 'Tu cuenta no coincide con la cédula del QR generado.' })
       }
@@ -84,18 +86,24 @@ export default class GeneradosClientesController {
       await generado.load('comercio')
 
       const results = {
+        id: generado.id,
+        cuotas: generado.cuotas,
         monto: generado.monto,
+        numero_cuenta: req.numero_cuenta,
+        MTNume: generado.numero_tarjeta,
+        numero_tarjeta: generado.numero_tarjeta,
         documento: generado.documento,
         descripcion: generado.descripcion,
         moneda: generado.moneda.abreviatura,
-        id: generado.id,
         fecha: generado.createdAt,
         comercio: generado.comercio.nombre,
         numero_movimiento: TcMovNro,
-        numero_cuenta: req.numero_cuenta,
-        info: generado.descripcion + ' ' + generado.detalle
+        info: generado.descripcion + ' ' + generado.detalle,
+        adicional: generado.adicional,
+        appel_codigo: generado.appel_codigo
       }
-      // console.log('result', results)
+      /* const farma = await ConfirmarPago(results)
+      console.log(farma) */
       return response.json({ success: true, message: 'Autorizado', results })
     } catch (error) {
       console.log(error)
