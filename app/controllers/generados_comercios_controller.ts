@@ -29,7 +29,6 @@ export default class GeneradosComerciosController {
         'numero_comprobante',
         'web'
       ])
-
       const idMoneda = req.moneda_id ?? 1
       const monedaFind = await Moneda.find(idMoneda)
       if (monedaFind == null) {
