@@ -15,7 +15,7 @@ export default class GeneradosClientesController {
 
       const generado = await Generado.find(req.id)
       await SupabaseLOG('autorizar BCQR',generado?.documento + ' ' + req.documento)
-      if (generado?.documento !== req.documento && generado?.numero_cuenta === '0') {
+      if (generado?.documento !== req.documento) {
         return response.status(401).json({ success: false, message: 'Tu cuenta no coincide con la cédula del QR generado.' })
       }
       const auditoria = await GeneradoAuditoria.findByOrFail('generado_id',req.id)
