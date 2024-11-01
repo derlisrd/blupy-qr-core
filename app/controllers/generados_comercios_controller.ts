@@ -18,6 +18,7 @@ export default class GeneradosComerciosController {
       const req = request.only([
         'monto',
         'descripcion',
+        'appel_codigo',
         'documento',
         'detalle',
         'condicion_venta',
@@ -45,6 +46,7 @@ export default class GeneradosComerciosController {
         monto: req.monto,
         web: req.web,
         documento: req.documento,
+        appel_codigo: req.appel_codigo,
         descripcion: req.descripcion,
         comercio_id: req.comercio_id,
         condicion_venta: req.condicion_venta,
@@ -69,6 +71,7 @@ export default class GeneradosComerciosController {
         results: {
           id: generado.id,
           codigo: generado.codigo,
+          appel_codigo: generado.appel_codigo,
           web: generado.web,
           imageUrl: 'https://quickchart.io/qr?text=' + generado.id,
           documento: generado.documento,
