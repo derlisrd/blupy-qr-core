@@ -18,7 +18,9 @@ export default class GeneradosClientesController {
       }
       const auditoria = await GeneradoAuditoria.findByOrFail('generado_id',req.id)
 
-      if (generado == null) return response.status(404).json({ success: false, message: 'QR inexistente.' })
+      if (generado == null) {
+        return response.status(404).json({ success: false, message: 'QR inexistente.' })
+      }
 
       // si es credito digital controla su saldo
       if (generado.condicion_venta === 1) {
