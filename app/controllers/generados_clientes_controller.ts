@@ -100,10 +100,11 @@ export default class GeneradosClientesController {
         adicional: generado.adicional,
         appel_codigo: generado.appel_codigo
       }
+      const respuesta = { success: true, message: 'Autorizado', results }
       // confirmar pago con farma
-      await ConfirmarPago(results)
+      await ConfirmarPago(respuesta)
 
-      return response.json({ success: true, message: 'Autorizado', results })
+      return response.json(respuesta)
     } catch (error) {
       console.log(error)
       // const message = error.messages[0].message ?? 'Error de servidor'
