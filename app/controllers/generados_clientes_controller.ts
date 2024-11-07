@@ -101,8 +101,8 @@ export default class GeneradosClientesController {
         appel_codigo: generado.appel_codigo
       }
       // confirmar pago con farma
-      const farma = await ConfirmarPago(results)
-      console.log(farma)
+      await ConfirmarPago(results)
+
       return response.json({ success: true, message: 'Autorizado', results })
     } catch (error) {
       console.log(error)
