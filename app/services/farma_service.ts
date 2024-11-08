@@ -9,5 +9,6 @@ export const ConfirmarPago = async (data: any) => {
       'Content-Type': 'application/json'
     }
   })
+  console.log({ username: env.get('USERNAME_FARMA'), password: env.get('PASSWORD_FARMA') })
   return res
 }
