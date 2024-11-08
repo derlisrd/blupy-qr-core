@@ -1,6 +1,6 @@
 import Generado from '#models/generado'
 import GeneradoAuditoria from '#models/generados_auditoria'
-import { ConfirmarPago } from '#services/farma_service'
+// import { ConfirmarPago } from '#services/farma_service'
 import { ListarTarjetasPorDoc, RegistrarTransaccion } from '#services/infinita_service'
 
 import { autorizarQRValidator } from '#validators/generar'
@@ -104,9 +104,9 @@ export default class GeneradosClientesController {
       }
       const respuesta = { success: true, message: 'Autorizado', results }
       // confirmar pago con farma
-      if (generado.web) {
+      /* if (generado.web) {
         await ConfirmarPago(respuesta)
-      }
+      } */
 
       return response.json(respuesta)
     } catch (error) {
