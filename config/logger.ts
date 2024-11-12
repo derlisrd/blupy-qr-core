@@ -18,10 +18,10 @@ const loggerConfig = defineConfig({
         targets: targets()
           .pushIf(!app.inProduction, targets.pretty())
           .pushIf(app.inProduction, targets.file({ destination: 1 }))
-          .toArray(),
-      },
-    },
-  },
+          .toArray()
+      }
+    }
+  }
 })
 
 export default loggerConfig

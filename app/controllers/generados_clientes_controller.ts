@@ -2,7 +2,7 @@ import Generado from '#models/generado'
 import GeneradoAuditoria from '#models/generados_auditoria'
 import { ConfirmarPago } from '#services/farma_service'
 import { ListarTarjetasPorDoc, RegistrarTransaccion } from '#services/infinita_service'
-
+import logger from '@adonisjs/core/services/logger'
 import { autorizarQRValidator } from '#validators/generar'
 import type { HttpContext } from '@adonisjs/core/http'
 
@@ -114,6 +114,7 @@ export default class GeneradosClientesController {
       return response.json(respuesta)
     } catch (error) {
       console.log(error)
+      logger.error({ err: error }, 'Something went wrong')
       // const message = error.messages[0].message ?? 'Error de servidor'
       return response.status(500).json({ success: false, message: 'Error de servidor. BQ501' })
     }
