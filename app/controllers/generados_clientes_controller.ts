@@ -2,7 +2,7 @@ import Generado from '#models/generado'
 import GeneradoAuditoria from '#models/generados_auditoria'
 import { ConfirmarPago } from '#services/farma_service'
 import { ListarTarjetasPorDoc, RegistrarTransaccion } from '#services/infinita_service'
-
+import logger from '@adonisjs/core/services/logger'
 import { autorizarQRValidator } from '#validators/generar'
 import type { HttpContext } from '@adonisjs/core/http'
 
@@ -13,9 +13,12 @@ export default class GeneradosClientesController {
       await autorizarQRValidator.validate(req)
 
       const generado = await Generado.find(req.id)
-      if (generado?.documento !== req.documento && (generado?.numero_cuenta === null || generado?.numero_cuenta === '0')) {
+      // && (generado?.numero_cuenta === null || generado?.numero_cuenta === '0')
+      if (generado?.documento !== req.documento) {
         return response
+
           .status(401)
+
           .json({ success: false, message: 'Tu cuenta no coincide con la cédula del QR generado.' })
       }
       const auditoria = await GeneradoAuditoria.findByOrFail('generado_id', req.id)
@@ -113,6 +116,7 @@ export default class GeneradosClientesController {
       return response.json(respuesta)
     } catch (error) {
       console.log(error)
+      logger.error({ err: error }, 'Something went wrong')
       // const message = error.messages[0].message ?? 'Error de servidor'
       return response.status(500).json({ success: false, message: 'Error de servidor. BQ501' })
     }
