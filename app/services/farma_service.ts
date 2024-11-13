@@ -1,10 +1,10 @@
 /* eslint-disable quote-props */
 import axios from 'axios'
-import env from '#start/env'
+// import env from '#start/env'
 
 export const ConfirmarPago = async (data: any) => {
   try {
-    const res = await axios.post(`${env.get('APIURL_FARMA')}/confirmar`, data, {
+    const res = await axios.post('https://dev.puntofarma.com.py:3089/api/blupy/qr/confirmar', data, {
       headers: {
         'username': 'ecommerce',
         'password': 'cK(<8W5+=$4_!9ZA,5Eliih^M?q&A~%f_]',
