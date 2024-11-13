@@ -6,8 +6,8 @@ export const ConfirmarPago = async (data: any) => {
   try {
     const res = await axios.post(`${env.get('APIURL_FARMA')}/confirmar`, data, {
       headers: {
-        'username': 'ecommerce',
-        'password': 'cK(<8W5+=$4_!9ZA,5Eliih^M?q&A~%f_]',
+        'username': env.get('USERNAME_FARMA'),
+        'password': env.get('PASSWORD_FARMA'),
         'Content-Type': 'application/json'
       }
     })
