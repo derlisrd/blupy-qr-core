@@ -1,6 +1,6 @@
 import Generado from '#models/generado'
 import GeneradoAuditoria from '#models/generados_auditoria'
-// import { ConfirmarPago } from '#services/farma_service'
+import { ConfirmarPago } from '#services/farma_service'
 import { ListarTarjetasPorDoc, RegistrarTransaccion } from '#services/infinita_service'
 import logger from '@adonisjs/core/services/logger'
 import { autorizarQRValidator } from '#validators/generar'
@@ -92,26 +92,28 @@ export default class GeneradosClientesController {
 
       const results = {
         id: generado.id,
+        codigo: generado.codigo,
         cuotas: generado.cuotas,
         monto: generado.monto,
         numero_cuenta: req.numero_cuenta,
         MTNume: generado.numero_tarjeta,
         numero_tarjeta: generado.numero_tarjeta,
         documento: generado.documento,
+        condicion_venta: generado.condicion_venta,
         descripcion: generado.descripcion,
         moneda: generado.moneda.abreviatura,
         fecha: generado.createdAt,
         comercio: generado.comercio.nombre,
         numero_movimiento: TcMovNro,
         info: generado.descripcion + ' ' + generado.detalle,
-        adicional: generado.adicional,
+        adicional: String(generado.adicional),
         appel_codigo: generado.appel_codigo
       }
       const respuesta = { success: true, message: 'Autorizado', results }
       // confirmar pago con farma
       if (generado.web) {
         console.log(respuesta)
-        // await ConfirmarPago(respuesta)
+        await ConfirmarPago(respuesta)
       }
 
       return response.json(respuesta)
