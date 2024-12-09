@@ -35,6 +35,9 @@ export default class Generado extends BaseModel {
   declare web: boolean
 
   @column()
+  declare farma: boolean
+
+  @column()
   declare documento: string
 
   @column()

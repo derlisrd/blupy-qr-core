@@ -151,6 +151,7 @@ export default class GeneradosClientesController {
         condicion: generado.condicion_venta,
         status: generado.status,
         monto: generado.monto,
+        farma: generado.farma,
         moneda: generado.moneda.abreviatura
       }
 
