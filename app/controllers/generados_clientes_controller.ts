@@ -105,7 +105,8 @@ export default class GeneradosClientesController {
         numero_movimiento: TcMovNro,
         info: generado.descripcion + ' ' + generado.detalle,
         adicional: generado.adicional === null ? null : String(generado.adicional),
-        appel_codigo: generado.appel_codigo
+        appel_codigo: generado.appel_codigo,
+        farma: generado.farma
       }
       const respuesta = { success: true, message: 'Autorizado', results }
       // confirmar pago con farma
