@@ -43,7 +43,8 @@ export default class GeneradosComerciosController {
         'moneda_id',
         'numero_movimiento',
         'numero_comprobante',
-        'web'
+        'web',
+        'farma'
       ])
       const idMoneda = req.moneda_id ?? 1
       const monedaFind = await Moneda.find(idMoneda)
@@ -70,6 +71,7 @@ export default class GeneradosComerciosController {
         moneda_id: idMoneda,
         numero_movimiento: req.numero_movimiento,
         numero_comprobante: req.numero_comprobante,
+        farma: req.farma,
         codigo
       })
 
@@ -88,6 +90,7 @@ export default class GeneradosComerciosController {
           codigo: generado.codigo,
           appel_codigo: generado.appel_codigo,
           web: generado.web,
+          farma: generado.farma,
           imageUrl: 'https://quickchart.io/qr?text=' + generado.id,
           documento: generado.documento,
           monto: generado.monto,

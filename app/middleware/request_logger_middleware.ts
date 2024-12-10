@@ -10,6 +10,7 @@ export default class RequestLoggerMiddleware {
     const fecha = new Date()
     const format = `${fecha.getFullYear()}-${String(fecha.getMonth() + 1).padStart(2, '0')}-${String(fecha.getDate()).padStart(2, '0')} ${fecha.getHours()}:${String(fecha.getMinutes()).padStart(2, '0')}:${String(fecha.getSeconds()).padStart(2, '0')} `
     console.log(`[${format}] ${request.method()} ${request.url()}`)
+    console.log(request.body())
     await next()
     /**
      * Call next method in the pipeline and return its output

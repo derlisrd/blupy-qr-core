@@ -36,7 +36,7 @@ router.use([
   () => import('@adonisjs/core/bodyparser_middleware'),
   () => import('@adonisjs/auth/initialize_auth_middleware'),
   () => import('#middleware/xapikey_middleware'),
-  () => import('#middleware/request_logger_middleware')
+
 ])
 
 /**
@@ -44,6 +44,7 @@ router.use([
  * the routes or the routes group.
  */
 export const middleware = router.named({
+  logRequest: () => import('#middleware/request_logger_middleware'),
   rol: () => import('#middleware/rol_middleware'),
   auth: () => import('#middleware/auth_middleware'),
   jwt: () => import('#middleware/jwt_auth_middleware')

@@ -22,7 +22,7 @@ router
 
 router
   .group(() => {
-    router.post('/generar-qr', [GeneradosComerciosController, 'generarQR'])
+    router.post('/generar-qr', [GeneradosComerciosController, 'generarQR']).middleware(middleware.logRequest())
     router.get('/consultar-autorizacion-codigo/:codigo', [GeneradosComerciosController, 'consultarAutorizacionPorCodigo'])
     router.delete('/anular', [GeneradosComerciosController, 'anular'])
     router.put('/revertir-pago', [GeneradosComerciosController, 'revertirPago'])
@@ -41,7 +41,7 @@ router
 
 router
   .group(() => {
-    router.post('/autorizar-qr', [GeneradosClientesController, 'autorizarQR'])
+    router.post('/autorizar-qr', [GeneradosClientesController, 'autorizarQR']).middleware(middleware.logRequest())
     router.get('/consultar-qr/:id', [GeneradosClientesController, 'consultarQR'])
   })
   .prefix('cliente')

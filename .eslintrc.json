@@ -25,6 +25,7 @@
       "no-unused-vars":"warn",
       "@typescript-eslint/class-literal-property-style": "off",
       "@typescript-eslint/naming-convention": "off",
-      "@typescript-eslint/consistent-type-imports": "off"
+      "@typescript-eslint/consistent-type-imports": "off",
+      "@typescript-eslint/eol-last" : "never"
     }
 }
