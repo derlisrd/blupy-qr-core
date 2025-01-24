@@ -43,6 +43,7 @@ router
   .group(() => {
     router.post('/autorizar-qr', [GeneradosClientesController, 'autorizarQR']).middleware(middleware.logRequest())
     router.get('/consultar-qr/:id', [GeneradosClientesController, 'consultarQR'])
+    router.get('/consultar-documento/:documento', [GeneradosClientesController, 'consultarQrDocumento'])
   })
   .prefix('cliente')
 

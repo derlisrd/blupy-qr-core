@@ -165,4 +165,50 @@ export default class GeneradosClientesController {
         .json({ success: false, error: 'Error de servidor contactar con administrador' })
     }
   }
+
+
+  async consultarQrDocumento({ request, response }: HttpContext) {
+    try {
+      const documento = request.param('documento')
+      const generado = await Generado.query()
+      .where('documento', documento)
+      .where('status', 0) // Filtra solo los status = 0
+      .orderBy('created_at', 'desc') // Ordena del más reciente al más antiguo
+      .first() // Trae solo el último
+
+      if (generado == null) {
+        return response.status(404).json({ success: false, message: 'No existe qr', results: null })
+      }
+      const cincoMinutos = 5 * 60 * 1000 // 5 minutos en milisegundos
+      const tiempoActual = new Date().getTime()
+      const tiempoCreacion = new Date(`${generado.createdAt}`).getTime()
+      if (tiempoActual - tiempoCreacion > cincoMinutos) {
+        return response.status(403).json({ success: false, message: 'QR vencido.', results: null })
+      }
+      await generado.load('comercio')
+      await generado.load('moneda')
+
+        const results = {
+          id: generado.id,
+          comercio: generado.comercio.nombre,
+          moneda : generado.moneda.abreviatura,
+          descripcion: generado.descripcion,
+          detalle: generado.detalle,
+          condicion: generado.condicion_venta,
+          status: generado.status,
+          monto: generado.monto,
+          farma: generado.farma,
+          web: generado.web,
+        }
+
+
+      return { success: true, results, message: '' }
+    } catch (error) {
+      console.log(error)
+
+      return response
+        .status(500)
+        .json({ success: false, error: 'Error de servidor contactar con administrador' })
+    }
+  }
 }
