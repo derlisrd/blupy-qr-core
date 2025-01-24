@@ -183,7 +183,7 @@ export default class GeneradosClientesController {
       const tiempoActual = new Date().getTime()
       const tiempoCreacion = new Date(`${generado.createdAt}`).getTime()
       if (tiempoActual - tiempoCreacion > cincoMinutos) {
-        return response.status(403).json({ success: false, message: 'QR vencido.', results: null })
+        return response.status(403).json({ success: false, message: 'Ultimo QR generado ha vencido.', results: null })
       }
       await generado.load('comercio')
       await generado.load('moneda')
