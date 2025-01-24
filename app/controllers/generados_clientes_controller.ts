@@ -172,9 +172,9 @@ export default class GeneradosClientesController {
       const documento = request.param('documento')
       const generado = await Generado.query()
       .where('documento', documento)
-      .where('status', 0) // Filtra solo los status = 0
-      .orderBy('created_at', 'desc') // Ordena del más reciente al más antiguo
-      .first() // Trae solo el último
+      .where('status', 0)
+      .orderBy('created_at', 'desc')
+      .first()
 
       if (generado == null) {
         return response.status(404).json({ success: false, message: 'No existe qr', results: null })
