@@ -14,7 +14,7 @@ export default class GeneradosClientesController {
 
       const generado = await Generado.find(req.id)
       // && (generado?.numero_cuenta === null || generado?.numero_cuenta === '0')
-      if (generado?.documento !== req.documento) {
+      if (generado?.documento !== req.documento && req.extranjero === '0') {
         return response
           .status(401)
           .json({ success: false, message: 'Tu cuenta no coincide con la cédula del QR generado.' })
