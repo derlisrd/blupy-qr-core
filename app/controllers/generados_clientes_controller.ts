@@ -13,12 +13,21 @@ export default class GeneradosClientesController {
       await autorizarQRValidator.validate(req)
 
       const generado = await Generado.find(req.id)
-      // && (generado?.numero_cuenta === null || generado?.numero_cuenta === '0')
+
+      if(generado && generado.status === 1){
+        return response.status(400).json({
+          success: false,
+          message: 'Ya has autorizado esta compra.'
+        })
+      }
+
+
       if (generado?.documento !== req.documento && req.extranjero === '0') {
         return response
           .status(401)
           .json({ success: false, message: 'Tu cuenta no coincide con la cédula del QR generado.' })
       }
+
       const auditoria = await GeneradoAuditoria.findByOrFail('generado_id', req.id)
 
       if (generado == null) {
