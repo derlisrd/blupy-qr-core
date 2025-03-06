@@ -16,7 +16,7 @@ export default class AuthController {
       // user.serialize()
       // const token = await User.accessTokens.create(user)
       const token = jwt.sign({ id: user.id, email: user.email }, env.get('JWT_SECRET', ''), {
-        expiresIn: 600
+        expiresIn: env.get('JWT_EXPIRES_IN', '1h')
       })
       return response.json({
         success: true,

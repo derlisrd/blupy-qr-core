@@ -119,30 +119,7 @@ export default class GeneradosComerciosController {
     }
   }
 
-  async anular({ request, response }: HttpContext) {
-    try {
-      // const id = request.param('id')
-      const { id } = request.only(['id'])
-      const generado = await Generado.find(id)
-      const auditoria = await GeneradoAuditoria.findByOrFail('generado_id',id)
-      if (generado == null) {
-        return response.status(404).json({ success: false, message: 'QR inexistente.' })
-      }
-      if (generado.status === 1) {
-        return response.status(400).json({ success: false, message: 'QR ya fue pagagado' })
-      }
-      auditoria.status = 'ANULADO'
-      generado.status = 2
-      await auditoria.save()
-      await generado.save()
-      return response.json({ success: true, message: 'QR anulada' })
-    } catch (error) {
-      console.log(error)
-      return response
-        .status(500)
-        .json({ success: false, error: 'Error de servidor contactar con administrador' })
-    }
-  }
+
 
   async consultarAutorizacion({ request, response }: HttpContext) {
     try {
@@ -209,6 +186,48 @@ export default class GeneradosComerciosController {
     }
   }
 
+  async anular({ request, response }: HttpContext) {
+    try {
+      // const id = request.param('id')
+      const { id } = request.only(['id'])
+      const generado = await Generado.find(id)
+      const auditoria = await GeneradoAuditoria.findByOrFail('generado_id',id)
+      if (generado == null) {
+        return response.status(404).json({ success: false, message: 'QR inexistente.' })
+      }
+
+      if(generado.status === 1 && generado.condicion_venta === 1 && generado.numero_cuenta !== '0' && generado.numero_movimiento !== null) {
+        auditoria.status = 'ANULADO'
+        generado.status = 2
+        const res = await RevertirTransaccion(
+          generado.monto,
+          generado.numero_cuenta,
+          'Reversión de mov. ' + generado.numero_movimiento
+        )
+        if (res.data.Retorno === 'ERROR' || res.status !== 200) {
+          return response
+            .status(400)
+            .json({ success: false, message: 'Ocurrio un error al anular y retornar.' })
+        }
+        await auditoria.save()
+        await generado.save()
+        return response.status(400).json({ success: true, message: 'QR anulado y revertido.', results: generado })
+      }
+
+      auditoria.status = 'ANULADO'
+      generado.status = 2
+      await auditoria.save()
+      await generado.save()
+
+      return response.json({ success: true, message: 'QR anulada', results: generado })
+    } catch (error) {
+      console.log(error)
+      return response
+        .status(500)
+        .json({ success: false, error: 'Error de servidor contactar con administrador' })
+    }
+  }
+
   /* revertir pago  */
   async revertirPago({ request, response }: HttpContext) {
     try {
@@ -229,7 +248,7 @@ export default class GeneradosComerciosController {
           .json({ success: false, message: 'Operacion ya ha sido revertida' })
       }
 
-      if (generado.numero_cuenta !== '0') {
+      if (generado.numero_cuenta !== '0'  && generado.numero_movimiento !== null) {
         const res = await RevertirTransaccion(
           generado.monto,
           generado.numero_cuenta,
