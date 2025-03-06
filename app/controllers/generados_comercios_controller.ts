@@ -202,7 +202,7 @@ export default class GeneradosComerciosController {
         const res = await RevertirTransaccion(
           generado.monto,
           generado.numero_cuenta,
-          'Reversión de mov. ' + generado.numero_movimiento
+          'Anulado y reversión de mov. ' + generado.numero_movimiento
         )
         if (res.data.Retorno === 'ERROR' || res.status !== 200) {
           return response
