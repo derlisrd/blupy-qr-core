@@ -1,6 +1,6 @@
 import Generado from '#models/generado'
 import GeneradoAuditoria from '#models/generados_auditoria'
-//import { ConfirmarPago } from '#services/farma_service'
+import { ConfirmarPago } from '#services/farma_service'
 import { ListarTarjetasPorDoc, RegistrarTransaccion } from '#services/infinita_service'
 import logger from '@adonisjs/core/services/logger'
 import { autorizarQRValidator } from '#validators/generar'
@@ -22,7 +22,7 @@ export default class GeneradosClientesController {
       }
 
 
-      if (generado?.documento !== req.documento && req.extranjero === '0') {
+      if (generado && generado.documento !== req.documento && req.extranjero === '0') {
         return response
           .status(401)
           .json({ success: false, message: 'Tu cuenta no coincide con la cédula del QR generado.' })
@@ -55,9 +55,7 @@ export default class GeneradosClientesController {
         return response.status(403).json({ success: false, message: 'QR vencido.' })
       }
 
-      if (generado.status === 1) {
-        return response.status(403).json({ success: false, message: 'QR ya autorizado' })
-      }
+
       if (generado.status === 2) {
         return response.status(403).json({ success: false, message: 'QR anulado.' })
       }
@@ -121,7 +119,7 @@ export default class GeneradosClientesController {
       const respuesta = { success: true, message: 'Autorizado', results }
       // confirmar pago con farma
       if (generado.web) {
-        //await ConfirmarPago(respuesta)
+        await ConfirmarPago(respuesta)
       }
 
       return response.json(respuesta)
