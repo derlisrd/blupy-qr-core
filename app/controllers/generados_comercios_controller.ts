@@ -248,7 +248,7 @@ export default class GeneradosComerciosController {
           .json({ success: false, message: 'Operacion ya ha sido revertida' })
       }
 
-      if (generado.numero_cuenta !== '0'  && generado.numero_movimiento !== null) {
+      if (generado.status === 1 && generado.numero_cuenta !== '0'  && generado.numero_movimiento !== null) {
         const res = await RevertirTransaccion(
           generado.monto,
           generado.numero_cuenta,
@@ -266,8 +266,7 @@ export default class GeneradosComerciosController {
       await auditoria.save()
       await generado.save()
 
-      const results = { id }
-      return response.json({ success: true, message: 'Operacion revertida ', results })
+      return response.json({ success: true, message: 'Operacion revertida ', results : {id} })
     } catch (error) {
       console.log(error)
       return response
