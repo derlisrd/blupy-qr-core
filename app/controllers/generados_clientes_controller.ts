@@ -1,7 +1,7 @@
 import Generado from '#models/generado'
 import GeneradoAuditoria from '#models/generados_auditoria'
 import { ConfirmarPago } from '#services/farma_service'
-import { ListarTarjetasPorDoc, RegistrarTransaccion } from '#services/infinita_service'
+import { /* ListarTarjetasPorDoc, */ RegistrarTransaccion } from '#services/infinita_service'
 import logger from '@adonisjs/core/services/logger'
 import { autorizarQRValidator } from '#validators/generar'
 import type { HttpContext } from '@adonisjs/core/http'
