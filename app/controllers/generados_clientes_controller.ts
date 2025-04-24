@@ -1,7 +1,7 @@
 import Generado from '#models/generado'
 import GeneradoAuditoria from '#models/generados_auditoria'
 import { ConfirmarPago } from '#services/farma_service'
-import { ListarTarjetasPorDoc, RegistrarTransaccion } from '#services/infinita_service'
+import { /* ListarTarjetasPorDoc, */ RegistrarTransaccion } from '#services/infinita_service'
 import logger from '@adonisjs/core/services/logger'
 import { autorizarQRValidator } from '#validators/generar'
 import type { HttpContext } from '@adonisjs/core/http'
@@ -36,7 +36,7 @@ export default class GeneradosClientesController {
 
       // si es credito digital controla su saldo
       if (generado.condicion_venta === 1) {
-        const res = await ListarTarjetasPorDoc(generado.documento)
+        /* const res = await ListarTarjetasPorDoc(generado.documento)
         const saldoAdeudado = res.data.Tarjetas[0].MTSaldo as string
         const saldoDisponible = res.data.Tarjetas[0].MTLinea as string
         const disponible = parseInt(saldoDisponible) - parseInt(saldoAdeudado)
@@ -44,7 +44,7 @@ export default class GeneradosClientesController {
           return response
             .status(400)
             .json({ success: false, message: 'No hay saldo suficiente en tu linea.' })
-        }
+        } */
       }
 
       const cincoMinutos = 5 * 60 * 1000 // 5 minutos en milisegundos
