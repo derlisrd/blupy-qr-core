@@ -199,19 +199,19 @@ export default class GeneradosComerciosController {
       if(generado.status === 1 && generado.condicion_venta === 1 && generado.numero_cuenta !== '0' && generado.numero_movimiento !== null) {
         auditoria.status = 'ANULADO'
         generado.status = 2
-        const res = await RevertirTransaccion(
+        /* const res = await RevertirTransaccion(
           generado.monto,
           generado.numero_cuenta,
           'Anulado y reversión de mov. ' + generado.numero_movimiento
-        )
-        if (res.data.Retorno === 'ERROR' || res.status !== 200) {
+        ) */
+        /* if (res.data.Retorno === 'ERROR' || res.status !== 200) {
           return response
             .status(400)
             .json({ success: false, message: 'Ocurrio un error al anular y retornar.' })
-        }
+        } */
         await auditoria.save()
         await generado.save()
-        return response.status(400).json({ success: true, message: 'QR anulado y revertido.', results: generado })
+        return response.status(400).json({ success: true, message: 'QR anulado.', results: generado })
       }
 
       auditoria.status = 'ANULADO'
