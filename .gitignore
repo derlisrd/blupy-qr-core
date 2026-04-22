@@ -24,3 +24,4 @@ package-lock.json
 
 # Platform specific
 .DS_Store
+pnpm-lock.yaml

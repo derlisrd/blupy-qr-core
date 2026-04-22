@@ -10,7 +10,6 @@ import { RevertirTransaccion } from '#services/infinita_service'
 import logger from '#services/logger'
 
 export default class GeneradosComerciosController {
-
   async consultarAutorizacionPorCodigo({ request, response }: HttpContext) {
     const codigo = request.param('codigo')
     const generado = await Generado.findBy({ codigo })
@@ -23,7 +22,7 @@ export default class GeneradosComerciosController {
     }
     return response.json({
       success: true,
-      results: generado
+      results: generado,
     })
   }
 
@@ -44,7 +43,7 @@ export default class GeneradosComerciosController {
         'numero_movimiento',
         'numero_comprobante',
         'web',
-        'farma'
+        'farma',
       ])
       const idMoneda = req.moneda_id ?? 1
       const monedaFind = await Moneda.find(idMoneda)
@@ -72,17 +71,17 @@ export default class GeneradosComerciosController {
         numero_movimiento: req.numero_movimiento,
         numero_comprobante: req.numero_comprobante,
         farma: req.farma,
-        codigo
+        codigo,
       })
 
       await GeneradoAuditoria.create({
         generado_id: generado.id,
-        status: 'GENERADO'
+        status: 'GENERADO',
       })
 
       await generado.load('moneda')
       await generado.load('comercio')
-      const base64 = await QRCode.toDataURL(String(generado.id),{ width: 256, margin: 2 })
+      const base64 = await QRCode.toDataURL(String(generado.id), { width: 256, margin: 2 })
       return response.json({
         success: true,
         results: {
@@ -105,8 +104,8 @@ export default class GeneradosComerciosController {
           numero_comprobante: generado.numero_comprobante,
           numero_movimiento: generado.numero_movimiento,
           fecha: generado.createdAt,
-          base64
-        }
+          base64,
+        },
       })
     } catch (error) {
       logger.info(String(error))
@@ -118,8 +117,6 @@ export default class GeneradosComerciosController {
       return response.status(500).json({ success: false, message })
     }
   }
-
-
 
   async consultarAutorizacion({ request, response }: HttpContext) {
     try {
@@ -149,7 +146,7 @@ export default class GeneradosComerciosController {
         condicion_venta: generado.condicion_venta,
         fecha: generado.createdAt,
         adicional: generado.adicional,
-        appel_codigo: generado.appel_codigo
+        appel_codigo: generado.appel_codigo,
       }
       return response.json({ success: true, message: 'Autorizado', results })
     } catch (error) {
@@ -164,16 +161,20 @@ export default class GeneradosComerciosController {
 
   async actualizarMovimiento({ request, response }: HttpContext) {
     try {
-      const req = request.only(['id','detalle','numero_comprobante','adicional','comercio_id'])
+      const req = request.only(['id', 'detalle', 'numero_comprobante', 'adicional', 'comercio_id'])
       const generado = await Generado.find(req.id)
       if (generado == null) {
         return response.status(400).json({ success: false, message: 'No existe movimiento' })
       }
       if (generado.status === 0) {
-        return response.status(400).json({ success: false, message: 'Movimiento no autorizado por el cliente.' })
+        return response
+          .status(400)
+          .json({ success: false, message: 'Movimiento no autorizado por el cliente.' })
       }
       if (generado.comercio_id !== req.comercio_id) {
-        return response.status(400).json({ success: false, message: 'Comercio no corresponde al movimiento.' })
+        return response
+          .status(400)
+          .json({ success: false, message: 'Comercio no corresponde al movimiento.' })
       }
       generado.numero_comprobante = req.numero_comprobante
       generado.detalle = req.detalle
@@ -191,12 +192,17 @@ export default class GeneradosComerciosController {
       // const id = request.param('id')
       const { id } = request.only(['id'])
       const generado = await Generado.find(id)
-      const auditoria = await GeneradoAuditoria.findByOrFail('generado_id',id)
+      const auditoria = await GeneradoAuditoria.findByOrFail('generado_id', id)
       if (generado == null) {
         return response.status(404).json({ success: false, message: 'QR inexistente.' })
       }
 
-      if(generado.status === 1 && generado.condicion_venta === 1 && generado.numero_cuenta !== '0' && generado.numero_movimiento !== null) {
+      if (
+        generado.status === 1 &&
+        generado.condicion_venta === 1 &&
+        generado.numero_cuenta !== '0' &&
+        generado.numero_movimiento !== null
+      ) {
         auditoria.status = 'ANULADO'
         generado.status = 2
         /* const res = await RevertirTransaccion(
@@ -211,10 +217,61 @@ export default class GeneradosComerciosController {
         } */
         await auditoria.save()
         await generado.save()
-        return response.status(400).json({ success: true, message: 'QR anulado.', results: generado })
+        return response
+          .status(400)
+          .json({ success: true, message: 'QR anulado.', results: generado })
       }
 
       auditoria.status = 'ANULADO'
+      generado.status = 2
+      await auditoria.save()
+      await generado.save()
+
+      return response.json({ success: true, message: 'QR anulada', results: generado })
+    } catch (error) {
+      console.log(error)
+      return response
+        .status(500)
+        .json({ success: false, error: 'Error de servidor contactar con administrador' })
+    }
+  }
+
+  async anularYretornarCredito({ request, response }: HttpContext) {
+    try {
+      // const id = request.param('id')
+      const { id } = request.only(['id'])
+      const generado = await Generado.find(id)
+      const auditoria = await GeneradoAuditoria.findByOrFail('generado_id', id)
+      if (generado == null) {
+        return response.status(404).json({ success: false, message: 'QR inexistente.' })
+      }
+
+      if (
+        generado.status === 1 &&
+        generado.condicion_venta === 1 &&
+        generado.numero_cuenta !== '0' &&
+        generado.numero_movimiento !== null
+      ) {
+        auditoria.status = 'REVERTIDO'
+        generado.status = 2
+        const res = await RevertirTransaccion(
+          generado.monto,
+          generado.numero_cuenta,
+          'Anulado y reversión de mov. ' + generado.numero_movimiento
+        ) 
+        if (res.data.Retorno === 'ERROR' || res.status !== 200) {
+          return response
+            .status(400)
+            .json({ success: false, message: 'Ocurrio un error al anular y retornar.' })
+        } 
+        await auditoria.save()
+        await generado.save()
+        return response
+          .status(400)
+          .json({ success: true, message: 'QR anulado.', results: generado })
+      }
+
+      auditoria.status = 'REVERTIDO'
       generado.status = 2
       await auditoria.save()
       await generado.save()
@@ -233,7 +290,7 @@ export default class GeneradosComerciosController {
     try {
       const { id } = request.only(['id'])
       const generado = await Generado.find(id)
-      const auditoria = await GeneradoAuditoria.findByOrFail('generado_id',id)
+      const auditoria = await GeneradoAuditoria.findByOrFail('generado_id', id)
       if (generado == null) {
         return response.status(404).json({ success: false, message: 'No autorizado' })
       }
@@ -248,7 +305,11 @@ export default class GeneradosComerciosController {
           .json({ success: false, message: 'Operacion ya ha sido revertida' })
       }
 
-      if (generado.status === 1 && generado.numero_cuenta !== '0'  && generado.numero_movimiento !== null) {
+      if (
+        generado.status === 1 &&
+        generado.numero_cuenta !== '0' &&
+        generado.numero_movimiento !== null
+      ) {
         const res = await RevertirTransaccion(
           generado.monto,
           generado.numero_cuenta,
@@ -266,7 +327,7 @@ export default class GeneradosComerciosController {
       await auditoria.save()
       await generado.save()
 
-      return response.json({ success: true, message: 'Operacion revertida ', results : {id} })
+      return response.json({ success: true, message: 'Operacion revertida ', results: { id } })
     } catch (error) {
       console.log(error)
       return response

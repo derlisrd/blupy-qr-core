@@ -25,6 +25,7 @@ router
     router.post('/generar-qr', [GeneradosComerciosController, 'generarQR']).middleware(middleware.logRequest())
     router.get('/consultar-autorizacion-codigo/:codigo', [GeneradosComerciosController, 'consultarAutorizacionPorCodigo'])
     router.delete('/anular', [GeneradosComerciosController, 'anular'])
+    router.put('/anular-revertir', [GeneradosComerciosController, 'anularYretornarCredito'])
     router.put('/revertir-pago', [GeneradosComerciosController, 'revertirPago'])
     router.get('/consultar-autorizacion/:id', [GeneradosComerciosController,'consultarAutorizacion'])
     router.put('/actualizar-movimiento',[GeneradosComerciosController,'actualizarMovimiento'])
