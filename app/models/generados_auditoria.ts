@@ -19,6 +19,9 @@ export default class GeneradoAuditoria extends BaseModel {
   declare telefono: string
 
   @column()
+  declare token: string
+
+  @column()
   declare localizacion: string
 
   @column()

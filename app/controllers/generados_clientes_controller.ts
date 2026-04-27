@@ -90,6 +90,7 @@ export default class GeneradosClientesController {
       auditoria.localizacion = req.localizacion
       auditoria.ip_user = req.ip
       auditoria.status = 'AUTORIZADO'
+      auditoria.token = req.token,
       await auditoria.save()
 
       await generado.load('moneda')
