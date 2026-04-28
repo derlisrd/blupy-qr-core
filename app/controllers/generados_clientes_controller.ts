@@ -92,7 +92,6 @@ export default class GeneradosClientesController {
       auditoria.status = 'AUTORIZADO'
       auditoria.token = req.token,
       await auditoria.save()
-      console.log({token: req.token})
       await generado.load('moneda')
       await generado.load('comercio')
 
