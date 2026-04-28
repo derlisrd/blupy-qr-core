@@ -13,11 +13,14 @@ export default class AuthController {
       const data = request.all()
       await userLoginValidator.validate(data)
       const user = await User.verifyCredentials(data.email, data.password)
-      // user.serialize()
-      // const token = await User.accessTokens.create(user)
-      const token = jwt.sign({ id: user.id, email: user.email }, env.get('JWT_SECRET', ''), {
-        expiresIn: env.get('JWT_EXPIRES_IN', '1h')
-      })
+      const secreto = String(env.get('JWT_SECRET', ''))
+      const token = jwt.sign(
+        { id: user.id, email: user.email },
+        secreto as jwt.Secret,
+        {
+          expiresIn: env.get('JWT_EXPIRES_IN', '1h') as jwt.SignOptions['expiresIn']
+        }
+      )
       return response.json({
         success: true,
         results: {
