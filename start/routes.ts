@@ -48,6 +48,10 @@ router
   })
   .prefix('cliente')
 
+router.get('/salud', async ({ response }) => {
+  return response.json({ success: true, message: 'API de pagos con QR' })
+})
+
 router.get('*', async ({ response }) => {
   return response.status(404).json({ success: false, message: 'Ruta no encontrada' })
 })
