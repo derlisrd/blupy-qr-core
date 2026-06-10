@@ -124,10 +124,7 @@ export default class GeneradosClientesController {
 
       return response.json(respuesta)
     } catch (error) {
-      console.error('ERROR CAPTURADO')
-      console.error(error)
       logger.error(error)
-      logger.error({ err: error }, 'Something went wrong')
       // const message = error.messages[0].message ?? 'Error de servidor'
       return response.status(500).json({ success: false, message: 'Error de servidor. BQ501' })
     }

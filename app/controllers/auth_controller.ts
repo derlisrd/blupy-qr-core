@@ -21,7 +21,6 @@ export default class AuthController {
           expiresIn: env.get('JWT_EXPIRES_IN', '1h') as jwt.SignOptions['expiresIn']
         }
       )
-      logger.info('INFO TEST')
       return response.json({
         success: true,
         results: {
