@@ -23,8 +23,9 @@ export default class GeneradosClientesController {
 
 
       if (generado && generado.documento !== req.documento && req.extranjero === 0) {
+        console.log('Tu cuenta no coincide con la cédula del QR generado.')
         return response
-          .status(401)
+          .status(400)
           .json({ success: false, message: 'Tu cuenta no coincide con la cédula del QR generado.' })
       }
 
