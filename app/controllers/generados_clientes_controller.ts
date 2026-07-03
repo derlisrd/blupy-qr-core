@@ -120,9 +120,9 @@ export default class GeneradosClientesController {
       }
       const respuesta = { success: true, message: 'Autorizado', results }
       // confirmar pago con farma
-      if (generado.web) {
+      /* if (generado.web) {
         await ConfirmarPago(respuesta)
-      }
+      } */
 
       return response.json(respuesta)
     } catch (error) {
