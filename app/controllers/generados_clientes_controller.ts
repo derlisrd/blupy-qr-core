@@ -6,6 +6,7 @@ import logger from '@adonisjs/core/services/logger'
 import { autorizarQRValidator } from '#validators/generar'
 import type { HttpContext } from '@adonisjs/core/http'
 
+
 export default class GeneradosClientesController {
   async autorizarQR({ request, response }: HttpContext) {
     try {
@@ -161,7 +162,8 @@ export default class GeneradosClientesController {
         status: generado.status,
         monto: generado.monto,
         farma: generado.farma,
-        moneda: generado.moneda.abreviatura
+        moneda: generado.moneda.abreviatura,
+        appel_codigo: generado.appel_codigo,
       }
 
       return { success: true, results }
@@ -199,7 +201,7 @@ export default class GeneradosClientesController {
         const results = {
           id: generado.id,
           comercio: generado.comercio.nombre,
-          moneda : generado.moneda.abreviatura,
+          moneda: generado.moneda.abreviatura,
           descripcion: generado.descripcion,
           detalle: generado.detalle,
           condicion: generado.condicion_venta,
@@ -207,6 +209,7 @@ export default class GeneradosClientesController {
           monto: generado.monto,
           farma: generado.farma,
           web: generado.web,
+          appel_codigo: generado.appel_codigo,
         }
 
 
